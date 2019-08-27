@@ -111,8 +111,53 @@ to worry about when formating our files in a configuration file in the root of t
 [ESLint](https://eslint.org/) is a linting utility for JavaScript and JSX. It will
 be used to also enforce a code style and standard in our code.
 
-Install it with yarn as a dev dependency:
+Install it with yarn as a dev dependency among other utilities to work with Prettier:
 
 ```
-yarn add eslint -D
+yarn add eslint eslint-config-prettier eslint-plugin-prettier -D
+```
+Create a configuration file with:
+
+```
+yarn eslint --init
+```
+
+Choose the following options in the wizard:
+- To check syntax, find problems and enforce code style
+- JavaScript modules (import/export)
+- None of these
+- Node (press i to select it)
+- Use a popular style guide
+- Airbnb (https://github.com/airbnb/javascript)
+- JavaScript
+
+Any prompt that appears, just type Y and hit enter.
+
+Then make your configuration file in the project's root to look like this:
+
+`.eslintrc.js`
+```javascript
+module.exports = {
+  env: {
+    es6: true,
+    node: true,
+  },
+  extends: ['airbnb-base', 'prettier'],
+  plugins: ['prettier'],
+  globals: {
+    Atomics: 'readonly',
+    SharedArrayBuffer: 'readonly',
+  },
+  parserOptions: {
+    ecmaVersion: 2018,
+    sourceType: 'module',
+  },
+  rules: {
+    'prettier/prettier': 'error',
+    'class-methods-use-this': 'off',
+    'no-param-reassign': 'off',
+    'camelcase': 'off',
+    'no-unused-vars': ['error', { argsIgnorePattern: 'next' }],
+  },
+};
 ```
