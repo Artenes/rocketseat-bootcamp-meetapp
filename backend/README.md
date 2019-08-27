@@ -161,6 +161,16 @@ module.exports = {
   },
 };
 ```
+
+Finally, delete the package-lock.json file and run yarn to update the yarn.lock file.
+EsLint uses npm to download some of its dependencies, since we are using yarn, we
+have to update our dependencies manually. 
+
+```
+rm package-lock.json
+yarn
+```
+
 ### Sequelize
 
 [Sequelize](https://sequelize.org/) is a promise-base Node.js ORM. It will be used
