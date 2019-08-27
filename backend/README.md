@@ -161,3 +161,55 @@ module.exports = {
   },
 };
 ```
+### Sequelize
+
+[Sequelize](https://sequelize.org/) is a promise-base Node.js ORM. It will be used
+to help us deal with access to a relational database and to manage the tables on it.
+
+Install it with yarn along other libraries to help it access a postgres database:
+
+```
+yarn add sequelize pg pg-hstore
+```
+
+Also install sequelize-cli, that is a cli to help generate files used by sequelize:
+
+```
+yarn add sequelize-cli -D
+```
+
+Sequelize need to know where we want to put some files it needs to work. For that
+we create this file in the root of the project:
+
+`.sequelizerc`
+```javascript
+const { resolve } = require('path');
+
+module.exports = {
+  'config': resolve(__dirname, 'src', 'config', 'database.js'),
+  'models-path': resolve(__dirname, 'src', 'app', 'models'),
+  'migrations-path': resolve(__dirname, 'src', 'database', 'migrations'),
+  'seeders-path': resolve(__dirname, 'src', 'database', 'seeds'),
+}
+```
+Note that this configuration is just a suggestion on how to organize the project,
+these paths can point to anywhere within the project directory.
+
+We have to tell sequelize how to acces our postgres database. For that we create the
+/src/config/database.js in our project:
+
+`database.js`
+```javascript
+module.exports = {
+  dialect: 'postgres',
+  host: 'localhost',
+  username: 'postgres',
+  password: 'docker',
+  database: 'postgres',
+  define: {
+    timestamps: true,
+    underscored: true,
+    underscoredAll: true,
+  },
+};
+```
