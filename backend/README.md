@@ -164,7 +164,7 @@ module.exports = {
 
 Finally, delete the package-lock.json file and run yarn to update the yarn.lock file.
 EsLint uses npm to download some of its dependencies, since we are using yarn, we
-have to update our dependencies manually. 
+have to update our dependencies manually.
 
 ```
 rm package-lock.json
@@ -206,7 +206,7 @@ Note that this configuration is just a suggestion on how to organize the project
 these paths can point to anywhere within the project directory.
 
 We have to tell sequelize how to acces our postgres database. For that we create the
-/src/config/database.js in our project:
+`/src/config/database.js` in our project:
 
 `database.js`
 ```javascript
@@ -224,3 +224,21 @@ module.exports = {
 };
 ```
 Note that this file is the same one defined in `.sequelizerc` file.
+
+### Scripts
+
+In your `package.json`, add the follwing attribute to the JSON object:
+
+```json
+"scripts":{
+  "dev": "nodemon src/server.js"
+}
+```
+
+Whenever you need to run your application, just run:
+
+```
+yarn dev
+```
+
+Note that you need the `src/server.js` file created with the code of your application.
