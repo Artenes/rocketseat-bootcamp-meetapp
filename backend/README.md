@@ -213,3 +213,4 @@ module.exports = {
   },
 };
 ```
+Note that this file is the same one defined in `.sequelizerc` file.
