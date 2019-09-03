@@ -29,4 +29,4 @@ const storage = multer.diskStorage({
   filename: changeFileName,
 });
 
-export default { storage };
+export default { storage, destination };
