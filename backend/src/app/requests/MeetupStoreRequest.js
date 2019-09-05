@@ -1,50 +1,48 @@
-import * as Yup from 'yup';
-import { parseISO, isAfter } from 'date-fns';
+import { parseISO, isBefore } from 'date-fns';
 import File from '../models/File';
+import validationSchema from '../schemas/StoreMeetupSchema';
+import { badRequest } from './responses';
 
-const validationSchema = Yup.object().shape({
-  title: Yup.string().required(),
-  description: Yup.string().required(),
-  localization: Yup.string().required(),
-  date: Yup.date().required(),
-  image_id: Yup.number().required(),
-});
-
+/**
+ * Validates a request to create a meetup
+ */
 class MeetupStoreRequest {
+  /**
+   * Validates the given request.
+   *
+   * @param {Object} request the request to validate.
+   * @return {Object|boolean} an error object or true if it is valid.
+   */
   async isValid(request) {
     this.body = request.body;
 
-    if (!(await this.isSchemaValid())) {
-      return this.error('Invalid data provided');
+    if (await this.isSchemaInvalid()) {
+      return badRequest('Invalid data provided');
     }
 
-    if (!(await this.doesImageExists())) {
-      return this.error(`Image with id ${this.body.image_id} does not exists`);
+    if (await this.imageDoesNotExists()) {
+      return badRequest('Image not found');
     }
 
-    if (!this.isGoingToHappen()) {
-      return this.error('Field date must be after today');
+    if (await this.isDateInPast()) {
+      return badRequest('Field date must be after today');
     }
 
     return true;
   }
 
-  async isSchemaValid() {
-    return validationSchema.isValid(this.body);
+  async isSchemaInvalid() {
+    return !validationSchema.isValid(this.body);
   }
 
-  async doesImageExists() {
-    return File.findByPk(this.body.image_id);
+  async imageDoesNotExists() {
+    return !File.findByPk(this.body.image_id);
   }
 
-  isGoingToHappen() {
-    const date = parseISO(this.body.date);
+  async isDateInPast() {
+    const parsedDate = parseISO(this.body.date);
     const now = new Date();
-    return isAfter(date, now);
-  }
-
-  error(message) {
-    return { status: 400, error: message, isValid: false };
+    return isBefore(parsedDate, now);
   }
 }
 
