@@ -1,4 +1,5 @@
 import MeetupStoreRequest from '../requests/MeetupStoreRequest';
+import Meetup from '../models/Meetup';
 
 class MeetupController {
   async store(req, res) {
@@ -7,7 +8,18 @@ class MeetupController {
       return res.status(status).json({ error });
     }
 
-    return res.json(req.body);
+    const { title, description, localization, date, image_id } = req.body;
+
+    await Meetup.create({
+      title,
+      description,
+      localization,
+      date,
+      image_id,
+      user_id: req.userId,
+    });
+
+    return res.send(201);
   }
 }
 
