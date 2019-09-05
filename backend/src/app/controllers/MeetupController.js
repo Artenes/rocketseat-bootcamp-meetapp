@@ -20,7 +20,7 @@ class MeetupController {
       user_id: req.userId,
     });
 
-    return res.send(201);
+    return res.sendStatus(201);
   }
 
   /**
