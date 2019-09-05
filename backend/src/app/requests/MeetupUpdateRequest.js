@@ -1,85 +1,80 @@
-import * as Yup from 'yup';
-import { isAfter, parseISO } from 'date-fns';
+import { parseISO, isBefore } from 'date-fns';
 import Meetup from '../models/Meetup';
 import File from '../models/File';
-
-const validationSchema = Yup.object().shape({
-  // min set to enforce that the string should not be empty
-  title: Yup.string().min(1),
-  description: Yup.string().min(1),
-  localization: Yup.string().min(1),
-  date: Yup.date(),
-  // 0 is a falsy value, so avoid receiving it by setting min to 1
-  image_id: Yup.number().min(1),
-});
+import validationSchema from '../schemas/UpdateMeetupSchema';
 
 /**
  * Validates a request to update a meetup
  */
 class MeetupUpdateRequest {
+  /**
+   * Validates the given request.
+   *
+   * @param {Object} request the request to validate.
+   * @return {Object|boolean}
+   */
   async isValid(request) {
     this.request = request;
-
     this.meetup = await Meetup.findByPk(request.params.id);
 
-    if (!this.doesMeetupExists()) {
+    if (await this.meetupDoesNotExists()) {
       return this.error('Meetup not found');
     }
 
-    if (!this.belongsToUser()) {
+    if (await this.doesNotBelongsToUser()) {
       return this.error('Meetup not found');
     }
 
-    if (!this.isMeetupGoingToHappen()) {
+    if (await this.isMeetupInPast()) {
       return this.error('Cannot edit past meetups');
     }
 
-    if (!(await this.isSchemaValid())) {
+    if (await this.isSchemaInvalid()) {
       return this.error('Invalid data provided');
     }
 
-    if (this.request.body.date && !this.isDateAfterToday()) {
+    if (await this.isDateInPast()) {
       return this.error('Field date must be after today');
     }
 
-    if (this.request.body.image_id && !(await this.doesImageExists())) {
-      return this.error(
-        `Image with id ${request.body.image_id} does not exists`
-      );
+    if (await this.imageDoesNotExists()) {
+      return this.error('Image not found');
     }
 
     return true;
   }
 
-  async isSchemaValid() {
-    return validationSchema.isValid(this.request.body);
+  async meetupDoesNotExists() {
+    return !this.meetup;
   }
 
-  doesMeetupExists() {
-    return this.meetup;
+  async doesNotBelongsToUser() {
+    return this.meetup.user_id !== this.request.userId;
   }
 
-  isMeetupGoingToHappen() {
+  async isMeetupInPast() {
     const now = new Date();
-    return isAfter(this.meetup.date, now);
+    return isBefore(this.meetup.date, now);
   }
 
-  belongsToUser() {
-    return this.meetup.user_id === this.request.userId;
+  async isSchemaInvalid() {
+    return !validationSchema.isValid(this.request.body);
   }
 
-  async doesImageExists() {
-    return File.findByPk(this.request.body.image_id);
-  }
-
-  isDateAfterToday() {
-    const date = parseISO(this.request.body.date);
+  async isDateInPast() {
+    const { date } = this.request.body;
+    const parsedDate = parseISO(date);
     const now = new Date();
-    return isAfter(date, now);
+    return date && isBefore(parsedDate, now);
+  }
+
+  async imageDoesNotExists() {
+    const { image_id } = this.request.body;
+    return image_id && !File.findByPk(image_id);
   }
 
   error(message) {
-    return { status: 400, error: message, isValid: false };
+    return { status: 400, error: message };
   }
 }
 
