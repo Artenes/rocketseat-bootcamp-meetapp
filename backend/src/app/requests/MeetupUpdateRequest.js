@@ -59,7 +59,7 @@ class MeetupUpdateRequest {
   }
 
   async isSchemaInvalid() {
-    return !validationSchema.isValid(this.request.body);
+    return !(await validationSchema.isValid(this.request.body));
   }
 
   async isDateInPast() {

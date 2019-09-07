@@ -32,7 +32,7 @@ class MeetupStoreRequest {
   }
 
   async isSchemaInvalid() {
-    return !validationSchema.isValid(this.body);
+    return !(await validationSchema.isValid(this.body));
   }
 
   async imageDoesNotExists() {
