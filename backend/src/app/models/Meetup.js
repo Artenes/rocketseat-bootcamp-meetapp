@@ -19,6 +19,10 @@ class Meetup extends Model {
     this.belongsTo(models.File, { foreignKey: 'image_id', as: 'banner' });
     this.belongsTo(models.User, { foreignKey: 'user_id', as: 'organizer' });
   }
+
+  isOrganizedBy(user) {
+    return this.user_id === user.id;
+  }
 }
 
 export default Meetup;
