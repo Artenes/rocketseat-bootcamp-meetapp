@@ -1,5 +1,6 @@
 import MeetupStoreRequest from '../requests/MeetupStoreRequest';
 import MeetupUpdateRequest from '../requests/MeetupUpdateRequest';
+import MeetupDeleteRequest from '../requests/MeetupDeleteRequest';
 import Meetup from '../models/Meetup';
 import File from '../models/File';
 
@@ -87,6 +88,24 @@ class MeetupController {
       date,
       image_id,
     });
+
+    return res.send();
+  }
+
+  /**
+   * Updates a meetup.
+   *
+   * @param {Object} req the incoming request.
+   * @param {Object} res the outgoing response.
+   */
+  async delete(req, res) {
+    const { error, status } = await MeetupDeleteRequest.isValid(req);
+    if (error) {
+      return res.status(status).json({ error });
+    }
+
+    const meetup = await Meetup.findByPk(req.params.id);
+    await meetup.destroy();
 
     return res.send();
   }
