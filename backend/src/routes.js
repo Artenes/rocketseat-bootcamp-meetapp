@@ -9,12 +9,14 @@ import FileController from './app/controllers/FileController';
 import multerConfig from './config/multer';
 import MeetupController from './app/controllers/MeetupController';
 import RegistrationController from './app/controllers/RegistrationController';
+import EventController from './app/controllers/EventController';
 
 const routes = new Router();
 const upload = multer(multerConfig);
 
 routes.post('/users', UserController.store);
 routes.post('/sessions', SessionController.store);
+routes.get('/events', EventController.index);
 
 // protected routes
 routes.use(authMiddleware);
