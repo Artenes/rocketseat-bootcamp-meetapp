@@ -1,6 +1,6 @@
-import updateUserSchema from '../schemas/UpdateUserSchema';
 import User from '../models/User';
 import UserStoreRequest from '../requests/UserStoreRequest';
+import UserUpdateRequest from '../requests/UserUpdateRequest';
 
 /**
  * Controlls user data.
@@ -23,38 +23,23 @@ class UserController {
     return res.sendStatus(201);
   }
 
+  /**
+   * Updates the logged user information.
+   *
+   * @param {Object} req the incoming request.
+   * @param {Object} res the outgoing response.
+   */
   async update(req, res) {
-    const isSchemaValid = await updateUserSchema.isValid(req.body);
-    if (!isSchemaValid) {
-      return res.status(400).json({ error: 'Validation fails' });
-    }
-
-    const { email, oldPassword } = req.body;
-
     const user = await User.findByPk(req.userId);
 
-    if (email && email !== user.email) {
-      const userExists = await User.findOne({ where: { email } });
-
-      if (userExists) {
-        return res.status(400).json({ error: 'User already exists' });
-      }
+    const { error, status } = await new UserUpdateRequest(req, user).isValid();
+    if (error) {
+      return res.status(status).json({ error });
     }
 
-    if (oldPassword) {
-      const passwordValid = await user.checkPassword(oldPassword);
-      if (oldPassword && !passwordValid) {
-        return res.status(401).json({ error: 'Password does not match' });
-      }
-    }
+    await user.update(req.body);
 
-    const { id, name } = await user.update(req.body);
-
-    return res.json({
-      id,
-      name,
-      email,
-    });
+    return res.send();
   }
 }
 
