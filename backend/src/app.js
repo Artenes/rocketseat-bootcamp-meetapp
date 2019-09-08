@@ -1,6 +1,8 @@
+import 'dotenv/config';
 import express from 'express';
 import routes from './routes';
 
+import multerConfig from './config/multer';
 import './database';
 
 class App {
@@ -12,6 +14,9 @@ class App {
 
   middlewares() {
     this.server.use(express.json());
+
+    // creates route to serve static files
+    this.server.use('/files', express.static(multerConfig.destination));
   }
 
   routes() {
