@@ -5,7 +5,7 @@
 <br />
 <p align="center">
   <a href="https://github.com/Artenes/rocketseat-bootcamp-meetapp/tree/master/backend">
-    <img style="background: #000" src="https://rocketseat.com.br/static/images/bootcamp/logo-gostack.svg" alt="Logo" width="80" height="80">
+    <img src="https://i.imgur.com/GiiNYKp.jpg" alt="Logo" width="90" height="80">
   </a>
 
   <h3 align="center">Meetapp (backend)</h3>
