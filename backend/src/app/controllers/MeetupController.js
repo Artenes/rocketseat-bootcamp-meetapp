@@ -116,12 +116,19 @@ class MeetupController {
    * @param {Object} res the outgoing response.
    */
   async delete(req, res) {
-    const { error, status } = await MeetupDeleteRequest.isValid(req);
+    const user = await User.findByPk(req.userId);
+    const meetup = await Meetup.findByPk(req.params.id);
+
+    const { error, status } = await new MeetupDeleteRequest(
+      user,
+      req,
+      meetup
+    ).isValid();
+
     if (error) {
       return res.status(status).json({ error });
     }
 
-    const meetup = await Meetup.findByPk(req.params.id);
     await meetup.destroy();
 
     return res.send();
