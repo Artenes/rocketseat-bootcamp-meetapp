@@ -85,7 +85,7 @@ yarn dev
 
 ## Usage
 
-In the root folder there is a file called `meetaap-insomnia.json` that can be imported into [Insomnia](https://insomnia.rest/). There there will be tests with sample requests for each available route.
+In the root folder there is a file called `meetapp-insomnia.json` that can be imported into [Insomnia](https://insomnia.rest/). There there will be tests with sample requests for each available route.
 
 There are protected and unprotected routes. To access a protected route, you need a `JWT` token in the header of the requeast as such:
 
