@@ -1,5 +1,3 @@
-import { isBefore } from 'date-fns';
-import Meetup from '../models/Meetup';
 import { badRequest, unauthorized, notFound } from './responses';
 
 /**
@@ -7,15 +5,22 @@ import { badRequest, unauthorized, notFound } from './responses';
  */
 class MeetupDeleteRequest {
   /**
+   * @param {User} user
+   * @param {Object} request
+   * @param {Meetup} meetup
+   */
+  constructor(user, request, meetup) {
+    this.user = user;
+    this.request = request;
+    this.meetup = meetup;
+  }
+
+  /**
    * Validates the given request.
    *
-   * @param {Object} request the request to validate.
    * @return {Object|boolean} an error object or true if it is valid.
    */
-  async isValid(request) {
-    this.request = request;
-    this.meetup = await Meetup.findByPk(request.params.id);
-
+  async isValid() {
     if (await this.meetupDoesNotExists()) {
       return notFound('Meetup not found');
     }
@@ -36,13 +41,12 @@ class MeetupDeleteRequest {
   }
 
   async doesNotBelongsToUser() {
-    return this.meetup.user_id !== this.request.userId;
+    return !this.meetup.isOrganizedBy(this.user);
   }
 
   async isMeetupInPast() {
-    const now = new Date();
-    return isBefore(this.meetup.date, now);
+    return this.meetup.hasPassed();
   }
 }
 
-export default new MeetupDeleteRequest();
+export default MeetupDeleteRequest;

@@ -1,7 +1,6 @@
 import { parseISO, isBefore } from 'date-fns';
-import Meetup from '../models/Meetup';
+import * as Yup from 'yup';
 import File from '../models/File';
-import validationSchema from '../schemas/UpdateMeetupSchema';
 import { badRequest, unauthorized, notFound } from './responses';
 
 /**
@@ -9,15 +8,31 @@ import { badRequest, unauthorized, notFound } from './responses';
  */
 class MeetupUpdateRequest {
   /**
+   * @param {User} user
+   * @param {Object} request
+   * @param {Meetup} meetup
+   */
+  constructor(user, request, meetup) {
+    this.user = user;
+    this.request = request;
+    this.meetup = meetup;
+
+    this.schema = Yup.object().shape({
+      // min set to enforce that the string should not be empty
+      title: Yup.string().min(1),
+      description: Yup.string().min(1),
+      localization: Yup.string().min(1),
+      date: Yup.date(),
+      image_id: Yup.number().min(1),
+    });
+  }
+
+  /**
    * Validates the given request.
    *
-   * @param {Object} request the request to validate.
    * @return {Object|boolean} an error object or true if it is valid.
    */
-  async isValid(request) {
-    this.request = request;
-    this.meetup = await Meetup.findByPk(request.params.id);
-
+  async isValid() {
     if (await this.meetupDoesNotExists()) {
       return notFound('Meetup not found');
     }
@@ -50,29 +65,27 @@ class MeetupUpdateRequest {
   }
 
   async doesNotBelongsToUser() {
-    return this.meetup.user_id !== this.request.userId;
+    return !this.meetup.isOrganizedBy(this.user);
   }
 
   async isMeetupInPast() {
-    const now = new Date();
-    return isBefore(this.meetup.date, now);
+    return this.meetup.hasPassed();
   }
 
   async isSchemaInvalid() {
-    return !validationSchema.isValid(this.request.body);
+    return !(await this.schema.isValid(this.request.body));
   }
 
   async isDateInPast() {
-    const { date } = this.request.body;
-    const parsedDate = parseISO(date);
+    const date = parseISO(this.request.body.date);
     const now = new Date();
-    return date && isBefore(parsedDate, now);
+    return date && isBefore(date, now);
   }
 
   async imageDoesNotExists() {
     const { image_id } = this.request.body;
-    return image_id && !File.findByPk(image_id);
+    return image_id && !(await File.findByPk(image_id));
   }
 }
 
-export default new MeetupUpdateRequest();
+export default MeetupUpdateRequest;

@@ -2,8 +2,12 @@ import MeetupStoreRequest from '../requests/MeetupStoreRequest';
 import MeetupUpdateRequest from '../requests/MeetupUpdateRequest';
 import MeetupDeleteRequest from '../requests/MeetupDeleteRequest';
 import Meetup from '../models/Meetup';
+import User from '../models/User';
 import File from '../models/File';
 
+/**
+ * Manages meetups created by the logged user.
+ */
 class MeetupController {
   /**
    * Lists all meetups created by the current user.
@@ -34,8 +38,14 @@ class MeetupController {
     return res.json(meetups);
   }
 
+  /**
+   * Creates a meetup.
+   *
+   * @param {Object} req the incoming request.
+   * @param {Object} res the outgoing response.
+   */
   async store(req, res) {
-    const { error, status } = await MeetupStoreRequest.isValid(req);
+    const { error, status } = await new MeetupStoreRequest(req).isValid();
     if (error) {
       return res.status(status).json({ error });
     }
@@ -61,18 +71,25 @@ class MeetupController {
    * @param {Object} res the outgoing response.
    */
   async update(req, res) {
-    const { error, status } = await MeetupUpdateRequest.isValid(req);
+    const user = await User.findByPk(req.userId);
+    const meetup = await Meetup.findByPk(req.params.id);
+
+    const { error, status } = await new MeetupUpdateRequest(
+      user,
+      req,
+      meetup
+    ).isValid();
     if (error) {
       return res.status(status).json({ error });
     }
 
     /**
-     * The request can has an arbitrary number of fields to update.
-     * To avoid setting to null any field that was not provided,
-     * we set the default value of each one to the value
-     * stored in the database prior to the update.
+     * If we do meetup.update(req.body),
+     * the client can change the user_id,
+     * to avoid this we extract only
+     * the fields we need, passing a default
+     * value to it if not provided.
      */
-    const meetup = await Meetup.findByPk(req.params.id);
     const {
       title = meetup.title,
       description = meetup.description,
@@ -99,12 +116,19 @@ class MeetupController {
    * @param {Object} res the outgoing response.
    */
   async delete(req, res) {
-    const { error, status } = await MeetupDeleteRequest.isValid(req);
+    const user = await User.findByPk(req.userId);
+    const meetup = await Meetup.findByPk(req.params.id);
+
+    const { error, status } = await new MeetupDeleteRequest(
+      user,
+      req,
+      meetup
+    ).isValid();
+
     if (error) {
       return res.status(status).json({ error });
     }
 
-    const meetup = await Meetup.findByPk(req.params.id);
     await meetup.destroy();
 
     return res.send();

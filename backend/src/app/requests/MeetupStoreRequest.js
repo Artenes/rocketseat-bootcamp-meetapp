@@ -1,6 +1,7 @@
 import { parseISO, isBefore } from 'date-fns';
+import * as Yup from 'yup';
+
 import File from '../models/File';
-import validationSchema from '../schemas/StoreMeetupSchema';
 import { badRequest } from './responses';
 
 /**
@@ -8,14 +9,25 @@ import { badRequest } from './responses';
  */
 class MeetupStoreRequest {
   /**
+   * @param {Object} request
+   */
+  constructor(request) {
+    this.request = request;
+    this.schema = Yup.object().shape({
+      title: Yup.string().required(),
+      description: Yup.string().required(),
+      localization: Yup.string().required(),
+      date: Yup.date().required(),
+      image_id: Yup.number().required(),
+    });
+  }
+
+  /**
    * Validates the given request.
    *
-   * @param {Object} request the request to validate.
    * @return {Object|boolean} an error object or true if it is valid.
    */
-  async isValid(request) {
-    this.body = request.body;
-
+  async isValid() {
     if (await this.isSchemaInvalid()) {
       return badRequest('Invalid data provided');
     }
@@ -32,18 +44,18 @@ class MeetupStoreRequest {
   }
 
   async isSchemaInvalid() {
-    return !validationSchema.isValid(this.body);
+    return !(await this.schema.isValid(this.request.body));
   }
 
   async imageDoesNotExists() {
-    return !File.findByPk(this.body.image_id);
+    return !(await File.findByPk(this.request.body.image_id));
   }
 
   async isDateInPast() {
-    const parsedDate = parseISO(this.body.date);
+    const parsedDate = parseISO(this.request.body.date);
     const now = new Date();
     return isBefore(parsedDate, now);
   }
 }
 
-export default new MeetupStoreRequest();
+export default MeetupStoreRequest;
