@@ -4,6 +4,9 @@ import MeetupDeleteRequest from '../requests/MeetupDeleteRequest';
 import Meetup from '../models/Meetup';
 import File from '../models/File';
 
+/**
+ * Manages meetups created by the logged user.
+ */
 class MeetupController {
   /**
    * Lists all meetups created by the current user.
@@ -34,8 +37,14 @@ class MeetupController {
     return res.json(meetups);
   }
 
+  /**
+   * Creates a meetup.
+   *
+   * @param {Object} req the incoming request.
+   * @param {Object} res the outgoing response.
+   */
   async store(req, res) {
-    const { error, status } = await MeetupStoreRequest.isValid(req);
+    const { error, status } = await new MeetupStoreRequest(req).isValid();
     if (error) {
       return res.status(status).json({ error });
     }
