@@ -1,6 +1,6 @@
 import { parseISO, isBefore } from 'date-fns';
+import * as Yup from 'yup';
 import File from '../models/File';
-import validationSchema from '../schemas/UpdateMeetupSchema';
 import { badRequest, unauthorized, notFound } from './responses';
 
 /**
@@ -16,6 +16,15 @@ class MeetupUpdateRequest {
     this.user = user;
     this.request = request;
     this.meetup = meetup;
+
+    this.schema = Yup.object().shape({
+      // min set to enforce that the string should not be empty
+      title: Yup.string().min(1),
+      description: Yup.string().min(1),
+      localization: Yup.string().min(1),
+      date: Yup.date(),
+      image_id: Yup.number().min(1),
+    });
   }
 
   /**
@@ -64,7 +73,7 @@ class MeetupUpdateRequest {
   }
 
   async isSchemaInvalid() {
-    return !(await validationSchema.isValid(this.request.body));
+    return !(await this.schema.isValid(this.request.body));
   }
 
   async isDateInPast() {
