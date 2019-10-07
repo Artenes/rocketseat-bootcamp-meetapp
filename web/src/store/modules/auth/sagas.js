@@ -17,18 +17,13 @@ export function* signIn({ payload }) {
 
     const { token, user } = response.data;
 
-    if (!user.provider) {
-      toast.error('User is not provider');
-      return;
-    }
-
     api.defaults.headers.Authorization = `Bearer ${token}`;
 
     yield put(signInSuccess(token, user));
 
     history.push('/dashboard');
   } catch (error) {
-    toast.error('Login failure, check your data again');
+    toast.error('Credenciais inválidas');
     yield put(signFailure());
   }
 }
