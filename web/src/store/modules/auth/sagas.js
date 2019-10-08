@@ -41,7 +41,16 @@ export function* signUp({ payload }) {
 
     history.push('/');
   } catch (error) {
-    toast.error('Sign up failure, check your data again');
+    // The proper way would be for the back-end to return a code to represent the error
+    // but for simplicity sake, we will check the error message and translate it
+    const emailInUse =
+      error.response && error.response.data.error === 'User already exists';
+    if (emailInUse) {
+      toast.error('E-mail já em uso');
+    } else {
+      toast.error('Falha no cadastro');
+    }
+
     yield put(signFailure());
   }
 }
