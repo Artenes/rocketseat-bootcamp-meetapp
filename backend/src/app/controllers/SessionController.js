@@ -28,13 +28,13 @@ class SessionController {
       return res.status(status).json({ error });
     }
 
-    const { id } = user;
+    const { id, name } = user;
 
     const token = jwt.sign({ id }, authConfig.secret, {
       expiresIn: authConfig.expiresIn,
     });
 
-    return res.json({ token });
+    return res.json({ token, user: { name, email } });
   }
 }
 

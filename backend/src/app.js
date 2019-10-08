@@ -1,5 +1,6 @@
 import 'dotenv/config';
 import express from 'express';
+import cors from 'cors';
 import routes from './routes';
 
 import multerConfig from './config/multer';
@@ -13,6 +14,7 @@ class App {
   }
 
   middlewares() {
+    this.server.use(cors());
     this.server.use(express.json());
 
     // creates route to serve static files
