@@ -6,22 +6,26 @@ import api from '~/services/api';
 
 import { signInSuccess, signFailure } from './actions';
 
+function* createSession(email, password) {
+  const response = yield call(api.post, 'sessions', {
+    email,
+    password,
+  });
+
+  const { token, user } = response.data;
+
+  api.defaults.headers.Authorization = `Bearer ${token}`;
+
+  yield put(signInSuccess(token, user));
+
+  history.push('/dashboard');
+}
+
 export function* signIn({ payload }) {
   try {
     const { email, password } = payload;
 
-    const response = yield call(api.post, 'sessions', {
-      email,
-      password,
-    });
-
-    const { token, user } = response.data;
-
-    api.defaults.headers.Authorization = `Bearer ${token}`;
-
-    yield put(signInSuccess(token, user));
-
-    history.push('/dashboard');
+    yield createSession(email, password);
   } catch (error) {
     toast.error('Credenciais inválidas');
     yield put(signFailure());
@@ -39,9 +43,18 @@ export function* signUp({ payload }) {
       provider: true,
     });
 
-    history.push('/');
+    yield createSession(email, password);
   } catch (error) {
-    toast.error('Sign up failure, check your data again');
+    // The proper way would be for the back-end to return a code to represent the error
+    // but for simplicity sake, we will check the error message and translate it
+    const emailInUse =
+      error.response && error.response.data.error === 'User already exists';
+    if (emailInUse) {
+      toast.error('E-mail já em uso');
+    } else {
+      toast.error('Falha no cadastro');
+    }
+
     yield put(signFailure());
   }
 }
