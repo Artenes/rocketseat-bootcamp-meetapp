@@ -8,7 +8,7 @@ export const Container = styled.div`
 
 export const Content = styled.div`
   height: 92px;
-  max-width: 900px;
+  max-width: 940px;
   margin: 0 auto;
   display: flex;
   justify-content: space-between;
