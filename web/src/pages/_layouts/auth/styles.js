@@ -58,8 +58,7 @@ export const Content = styled.div`
       color: #fff;
       margin-top: 15px;
       font-size: 16px;
-      font-style: italic;
-      opacity: 0.8;
+      opacity: 0.6;
 
       &:hover {
         opacity: 1;
