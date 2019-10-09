@@ -6,19 +6,31 @@ import { updateProfileFailure, updateProfileSuccess } from './actions';
 
 export function* updateProfile({ payload }) {
   try {
-    const { name, email, avatar_id, ...rest } = payload;
+    const { name, email, ...rest } = payload;
 
     const profile = Object.assign(
-      { name, email, avatar_id },
+      { name, email },
       rest.oldPassword ? rest : {}
     );
 
-    const response = yield call(api.put, 'users', profile);
+    yield call(api.put, 'users', profile);
 
-    toast.success('Profile updated');
-    yield put(updateProfileSuccess(response.data));
+    toast.success('Perfil atualizado');
+    // backend does not send data back, but if it did no throw any error
+    // that means the form data is valid, so just use to update the store
+    yield put(updateProfileSuccess({ name, email }));
   } catch (error) {
-    toast.error('Error while updating profile. Check your data again.');
+    // The proper way would be for the back-end to return a code to represent the error
+    // but for simplicity sake, we will check the error message and translate it
+    const message = error.response && error.response.data.error;
+
+    if (message === 'User already exists') {
+      toast.error('E-mail já em uso');
+    } else if (message === 'Password does not match') {
+      toast.error('Senha inválida');
+    } else {
+      toast.error('Erro ao atualizar perfil');
+    }
     yield put(updateProfileFailure());
   }
 }

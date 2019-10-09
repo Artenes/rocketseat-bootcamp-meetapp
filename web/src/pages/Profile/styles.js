@@ -29,7 +29,7 @@ export const Container = styled.div`
     }
 
     span {
-      color: #fb6f91;
+      color: #f94d6a;
       align-self: flex-start;
       margin: 0 0 10px;
       font-weight: bold;

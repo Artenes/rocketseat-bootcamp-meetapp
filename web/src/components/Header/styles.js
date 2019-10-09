@@ -63,6 +63,7 @@ export const Profile = styled.div`
 
   button {
     width: 71px;
+    height: 42px;
     background: #d44059;
     border: 0;
     border-radius: 4px;
