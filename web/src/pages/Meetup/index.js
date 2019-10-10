@@ -4,13 +4,15 @@ import { FaMapMarkerAlt } from 'react-icons/fa';
 import { format, parseISO } from 'date-fns';
 import pt from 'date-fns/locale/pt-BR';
 import { Link } from 'react-router-dom';
+import history from '~/services/history';
 
 import api from '~/services/api';
-import { Container } from './styles';
+import { Container, CancelDialog } from './styles';
 
 export default function Meetup({ match }) {
   const { id } = match.params;
   const [meetup, setMeetup] = useState([]);
+  const [isDialogVisible, setDialogVisible] = useState(false);
 
   useEffect(() => {
     async function loadMeetups() {
@@ -40,12 +42,28 @@ export default function Meetup({ match }) {
     loadMeetups();
   }, [id]);
 
-  function handleCancelation() {
-    // handle canelation
+  async function handleCancelation() {
+    await api.delete(`/meetups/${id}`);
+    history.push('/dashboard');
   }
 
   return (
     <Container>
+      {isDialogVisible && (
+        <CancelDialog>
+          <div>
+            <strong>Deseja cancelar o meetup {meetup.title}?</strong>
+            <footer>
+              <button type="button" onClick={() => setDialogVisible(false)}>
+                Não
+              </button>
+              <button type="button" onClick={handleCancelation}>
+                Sim
+              </button>
+            </footer>
+          </div>
+        </CancelDialog>
+      )}
       <header>
         <h1>{meetup.title}</h1>
         <nav>
@@ -53,24 +71,21 @@ export default function Meetup({ match }) {
             <MdEdit size={20} color="#fff" />
             Editar
           </Link>
-          <button onClick={handleCancelation} type="button">
+          <button onClick={() => setDialogVisible(true)} type="button">
             <MdDeleteForever size={20} color="#fff" />
             Cancelar
           </button>
         </nav>
       </header>
       <div>
-        <img
-          src="https://camunda.com/img/events/meetup-example.jpg"
-          alt={meetup.title}
-        />
+        <img src={meetup.banner} alt={meetup.title} />
         <p>{meetup.description}</p>
         <ul>
           <li>
-            <MdEvent size={20} /> {meetup.formattedDate}
+            <MdEvent size={18} /> {meetup.formattedDate}
           </li>
           <li>
-            <FaMapMarkerAlt size={18} /> {meetup.localization}
+            <FaMapMarkerAlt size={15} /> {meetup.localization}
           </li>
         </ul>
       </div>
