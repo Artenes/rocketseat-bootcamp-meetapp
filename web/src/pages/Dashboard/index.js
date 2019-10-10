@@ -1,90 +1,77 @@
-import React, { useState, useMemo, useEffect } from 'react';
-import { MdChevronLeft, MdChevronRight } from 'react-icons/md';
+import React, { useState, useEffect } from 'react';
 import {
-  format,
-  addDays,
-  subDays,
-  setHours,
-  setMinutes,
-  setSeconds,
-  isBefore,
-  isEqual,
-  parseISO,
-} from 'date-fns';
-import en from 'date-fns/locale/en-US';
+  MdAddCircleOutline,
+  MdChevronRight,
+  MdSentimentDissatisfied,
+} from 'react-icons/md';
+import { format, parseISO } from 'date-fns';
+import pt from 'date-fns/locale/pt-BR';
+import { Link } from 'react-router-dom';
 
-import { utcToZonedTime } from 'date-fns-tz';
 import api from '~/services/api';
-import { Container, Time } from './styles';
-
-const range = [8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20];
+import { Container, Meetup, NoMeetup } from './styles';
 
 export default function Dashboard() {
-  const [schedule, setSchedule] = useState([]);
-  const [date, setDate] = useState(new Date());
-  const formattedDate = useMemo(
-    () => format(date, "d',' MMMM", { locale: en }),
-    [date]
-  );
+  const [meetups, setMeetups] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    async function loadSchedule() {
-      const response = await api.get('schedules', {
-        params: { date },
-      });
+    async function loadMeetups() {
+      const response = await api.get('meetups');
 
-      const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+      const data = response.data.map(meetup => {
+        const date = parseISO(meetup.date);
 
-      const data = range.map(hour => {
-        const checkDate = setSeconds(setMinutes(setHours(date, hour), 0), 0);
-        const compareDate = utcToZonedTime(checkDate, timezone);
+        // date-fns does not capitalize months: https://github.com/date-fns/date-fns/issues/674
+        // so just for consistency let's take each part individually and mount the stirng as we wish
+        const day = format(date, 'd');
+        const month = format(date, 'MMMM', { locale: pt });
+        const hour = format(date, 'HH');
+        const capitalizedMonth = month.charAt(0).toUpperCase() + month.slice(1);
+
+        const formattedDate = `${day} de ${capitalizedMonth}, às ${hour}h`;
 
         return {
-          time: `${hour}:00h`,
-          past: isBefore(compareDate, new Date()),
-          appointment: response.data.find(a =>
-            isEqual(parseISO(a.date), compareDate)
-          ),
+          ...meetup,
+          formattedDate,
         };
       });
 
-      setSchedule(data);
+      setMeetups(data);
+      setLoading(false);
     }
-    loadSchedule();
-  }, [date]);
 
-  function handleNextDay() {
-    const nextDay = addDays(date, 1);
-    setDate(nextDay);
-  }
-
-  function handlePreviousDay() {
-    const previousDay = subDays(date, 1);
-    setDate(previousDay);
-  }
+    loadMeetups();
+  }, []);
 
   return (
     <Container>
       <header>
-        <button type="button" onClick={handlePreviousDay}>
-          <MdChevronLeft size={36} color="#fff" />
-        </button>
-        <strong>{formattedDate}</strong>
-        <button type="button" onClick={handleNextDay}>
-          <MdChevronRight size={36} color="#fff" />
-        </button>
+        <h1>Meus meetups</h1>
+        <Link to="/meetup">
+          <MdAddCircleOutline size={20} color="#fff" />
+          Novo meetup
+        </Link>
       </header>
 
-      <ul>
-        {schedule.map(time => (
-          <Time key={time.time} past={time.past} available={!time.appointment}>
-            <strong>{time.time}</strong>
-            <span>
-              {time.appointment ? time.appointment.user.name : 'Available'}
-            </span>
-          </Time>
+      {meetups.length === 0 && !loading && (
+        <NoMeetup>
+          <MdSentimentDissatisfied size={100} color="#fff" />
+          <h2>Nenhum meetup encontrado</h2>
+        </NoMeetup>
+      )}
+
+      <div>
+        {meetups.map(meetup => (
+          <Meetup to={`meetup/${meetup.id}`} key={meetup.id}>
+            <strong>{meetup.title}</strong>
+            <p>
+              {meetup.formattedDate}
+              <MdChevronRight size={24} color="#fff" />
+            </p>
+          </Meetup>
         ))}
-      </ul>
+      </div>
     </Container>
   );
 }

@@ -1,54 +1,98 @@
 import styled from 'styled-components';
+import { darken } from 'polished';
+import { Link } from 'react-router-dom';
 
 export const Container = styled.div`
-  max-width: 600px;
+  max-width: 940px;
   margin: 50px auto;
-
+  color: #fff;
   display: flex;
   flex-direction: column;
 
   header {
     display: flex;
-    align-self: center;
     align-items: center;
+    justify-content: space-between;
 
-    button {
-      border: 0;
-      background: none;
+    h1 {
+      font-size: 32px;
     }
 
-    strong {
+    a {
+      border: 0;
+      height: 42px;
+      width: 172px;
+      background: #f94d6a;
       color: #fff;
-      font-size: 24px;
-      margin: 0 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 4px;
+      font-size: 16px;
+      font-weight: bold;
+      transition: background 0.2s;
+
+      svg {
+        margin-right: 12px;
+      }
+
+      &:hover {
+        background: ${darken(0.03, '#F94D6A')};
+      }
     }
   }
 
-  ul {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    grid-gap: 15px;
-    margin-top: 30px;
+  div {
+    display: flex;
+    flex-direction: column;
+    margin-top: 50px;
   }
 `;
 
-export const Time = styled.li`
-  padding: 20px;
+export const NoMeetup = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 300px;
+  background: rgba(0, 0, 0, 0.1);
+
+  svg {
+    margin-bottom: 20px;
+  }
+`;
+
+export const Meetup = styled(Link)`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.1);
   border-radius: 4px;
-  background: #fff;
+  padding: 20px 30px;
+  margin-bottom: 10px;
+  transition: background 0.2s;
 
-  opacity: ${props => (props.past ? 0.6 : 1)};
-
-  strong {
-    display: block;
-    color: ${props => (props.available ? '#999' : '#7159c1')};
-    font-size: 20px;
-    font-weight: normal;
+  &:hover {
+    background: rgba(0, 0, 0, 0.3);
   }
 
-  span {
-    display: block;
-    margin-top: 3px;
-    color: ${props => (props.available ? '#999' : '#666')};
+  &:hover svg {
+    transform: translateX(2px);
+  }
+
+  strong {
+    color: #fff;
+    font-size: 18px;
+  }
+
+  p {
+    color: rgba(255, 255, 255, 0.6);
+    display: flex;
+    align-items: center;
+
+    svg {
+      margin-left: 23px;
+    }
   }
 `;
