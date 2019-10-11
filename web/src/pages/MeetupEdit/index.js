@@ -14,7 +14,7 @@ const schema = Yup.object().shape({
   description: Yup.string().required(),
   localization: Yup.string().required(),
   date: Yup.date().required(),
-  image_id: Yup.number().required(),
+  image_id: Yup.number().required('selecione um banner'),
 });
 
 export default function MeetupEdit({ match }) {

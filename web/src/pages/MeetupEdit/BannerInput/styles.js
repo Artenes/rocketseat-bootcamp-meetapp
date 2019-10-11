@@ -21,6 +21,7 @@ export const Container = styled.div`
       border-radius: 4px;
       width: 100%;
       height: 300px;
+      margin-bottom: 10px;
 
       svg {
         color: rgba(255, 255, 255, 0.3);
@@ -42,6 +43,7 @@ export const Container = styled.div`
       height: 300px;
       border-radius: 4px;
       object-fit: cover;
+      margin-bottom: 10px;
     }
 
     input {

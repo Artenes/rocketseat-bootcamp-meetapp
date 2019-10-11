@@ -6,8 +6,8 @@ import api from '~/services/api';
 
 import { Container } from './styles';
 
-export default function BannerInput() {
-  const { defaultValue, registerField } = useField('avatar');
+export default function BannerInput({ name }) {
+  const { fieldName, defaultValue, registerField, error } = useField(name);
 
   const [preview, setPreview] = useState(defaultValue && defaultValue.url);
   const [file, setFile] = useState(defaultValue && defaultValue.id);
@@ -28,12 +28,12 @@ export default function BannerInput() {
   useEffect(() => {
     if (ref.current) {
       registerField({
-        name: 'avatar_id',
+        name: fieldName,
         ref: ref.current,
         path: 'dataset.file',
       });
     }
-  }, [ref, registerField]);
+  }, [fieldName, registerField]);
 
   return (
     <Container>
@@ -56,6 +56,8 @@ export default function BannerInput() {
           ref={ref}
         />
       </label>
+
+      {error && <span>{error}</span>}
     </Container>
   );
 }
