@@ -1,56 +1,63 @@
-import React from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import React, { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import { Form, Input } from '@rocketseat/unform';
 import { MdAddCircleOutline } from 'react-icons/md';
 import * as Yup from 'yup';
+import { format, parseISO } from 'date-fns';
 
 import BannerInput from './BannerInput';
-import { updateProfileRequest } from '~/store/modules/user/actions';
 import { Container } from './styles';
-
-const thenPasswordIsRequired = (oldPassword, field) =>
-  oldPassword
-    ? field.required('informe uma senha').min(6, 'deve ter ao menos 6 dígitos')
-    : field;
-
-const thenConfirmPasswordIsRequired = (passwordField, field) =>
-  passwordField
-    ? field
-        .required('informe a senha novamente')
-        .oneOf([Yup.ref('password')], 'senhas não são iguais')
-    : field;
+import api from '~/services/api';
 
 const schema = Yup.object().shape({
-  name: Yup.string().required('informe seu nome'),
-  email: Yup.string()
-    .email('e-mail inválido')
-    .required('informe seu email'),
-  oldPassword: Yup.string(),
-  password: Yup.string().when('oldPassword', thenPasswordIsRequired),
-  confirmPassword: Yup.string().when('password', thenConfirmPasswordIsRequired),
+  title: Yup.string().required(),
+  description: Yup.string().required(),
+  localization: Yup.string().required(),
+  date: Yup.date().required(),
+  image_id: Yup.number().required(),
 });
 
-export default function Profile() {
-  const dispatch = useDispatch();
-  const profile = useSelector(state => state.user.profile);
-  const loading = useSelector(state => state.user.loading);
+export default function MeetupEdit({ match }) {
+  const { id } = match.params;
+  const loading = useSelector(state => state.auth.loading);
+  const [meetup, setMeetup] = useState({});
 
-  function handleSubmit(data, { resetForm }) {
-    dispatch(updateProfileRequest(data));
-    const { name, email } = data;
-    resetForm({ name, email });
+  useEffect(() => {
+    async function loadMeetupIfEditing() {
+      if (!id) {
+        return;
+      }
+
+      const response = await api.get('meetups');
+
+      // for simplicity, instead of creating another endpoint in backend
+      // just query for the data in the list of meetups
+      const data = response.data.find(m => m.id === Number(id));
+      const date = parseISO(data.date);
+
+      setMeetup({
+        ...data,
+        date: format(date, "dd'/'MM'/'yyyy"),
+      });
+    }
+
+    loadMeetupIfEditing();
+  }, [id]);
+
+  function handleSubmit() {
+    // send to update
   }
 
   return (
     <Container>
-      <Form initialData={profile} onSubmit={handleSubmit} schema={schema}>
-        <BannerInput />
-        <Input type="text" name="tile" placeholder="Título do Meetup" />
+      <Form initialData={meetup} onSubmit={handleSubmit} schema={schema}>
+        <BannerInput name="image_id" />
+        <Input type="text" name="title" placeholder="Título do Meetup" />
         <Input
           multiline
-          type="text"
           name="description"
           placeholder="Descrição completa"
+          value={meetup.description}
         />
         <Input type="text" name="date" placeholder="Data do meetup" />
         <Input type="text" name="localization" placeholder="Localização" />
