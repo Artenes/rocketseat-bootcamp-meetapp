@@ -31,7 +31,6 @@ export default function BannerInput() {
         name: 'avatar_id',
         ref: ref.current,
         path: 'dataset.file',
-        clearValue: () => {},
       });
     }
   }, [ref, registerField]);
