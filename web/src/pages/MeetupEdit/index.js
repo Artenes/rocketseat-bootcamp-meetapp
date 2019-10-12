@@ -11,7 +11,7 @@ import api from '~/services/api';
 
 const schema = Yup.object().shape({
   title: Yup.string().required(),
-  description: Yup.string().required(),
+  description: Yup.string().required('informe uma descrição'),
   localization: Yup.string().required(),
   date: Yup.date().required(),
   image_id: Yup.number().required('selecione um banner'),
@@ -21,6 +21,14 @@ export default function MeetupEdit({ match }) {
   const { id } = match.params;
   const loading = useSelector(state => state.auth.loading);
   const [meetup, setMeetup] = useState({});
+  const [description, setDescription] = useState('');
+
+  // Don't know if it is unform's fault (https://github.com/Rocketseat/unform/issues/129)
+  // or is something else being a jerk about showing text in a textarea
+  // while other inputs display values ok, textare does not show anything
+  useEffect(() => {
+    setDescription(meetup.description);
+  }, [meetup]);
 
   useEffect(() => {
     async function loadMeetupIfEditing() {
@@ -57,7 +65,8 @@ export default function MeetupEdit({ match }) {
           multiline
           name="description"
           placeholder="Descrição completa"
-          value={meetup.description}
+          value={description}
+          onChange={e => setDescription(e.target.value)}
         />
         <Input type="text" name="date" placeholder="Data do meetup" />
         <Input type="text" name="localization" placeholder="Localização" />
