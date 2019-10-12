@@ -7,11 +7,6 @@ import { useField } from '@rocketseat/unform';
 import 'react-datepicker/dist/react-datepicker.css';
 
 /**
- * The "time" header it is still in english because reasons.
- * Check https://reactdatepicker.com/#example-locale-with-time and
- * see the "Locale with time" example, it uses pt-BR and still display
- * "time" instead of "horas".
- *
  * Also the error message was hardcoded because it was not getting
  * the one sent by unform (using yup).
  */
@@ -47,6 +42,7 @@ export default function ReactDatePicker({ name, placeholder }) {
         dateFormat="d 'de' MMMM', às' HH':'mm"
         showTimeSelect
         locale="pt"
+        timeCaption="Hora"
       />
       {error && <span>informe uma data</span>}
     </>
