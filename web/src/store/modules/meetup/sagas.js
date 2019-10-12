@@ -17,8 +17,8 @@ export function* createMeetup({ payload }) {
       ? error.response.data.error
       : 'Erro de conexão';
     toast.error(message);
-    yield put(finishMeetupSave());
   }
+  yield put(finishMeetupSave());
 }
 
 export function* updateProfile({ payload }) {
@@ -33,8 +33,8 @@ export function* updateProfile({ payload }) {
       ? error.response.data.error
       : 'Erro de conexão';
     toast.error(message);
-    yield put(finishMeetupSave());
   }
+  yield put(finishMeetupSave());
 }
 
 export default all([
