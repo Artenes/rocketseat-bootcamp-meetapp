@@ -33,7 +33,7 @@ export default function BannerInput({ name }) {
         path: 'dataset.file',
       });
     }
-  }, [fieldName, registerField]);
+  }, []); //eslint-disable-line
 
   return (
     <Container>
