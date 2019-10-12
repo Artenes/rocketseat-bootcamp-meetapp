@@ -40,7 +40,7 @@ export default function Meetup({ match }) {
     }
 
     loadMeetups();
-  }, [id]);
+  }, []); //eslint-disable-line
 
   async function handleCancelation() {
     await api.delete(`/meetups/${id}`);
