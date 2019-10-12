@@ -12,11 +12,11 @@ import api from '~/services/api';
 
 // The data validation error message has no effect on react-datepicker
 const schema = Yup.object().shape({
-  title: Yup.string().required(),
+  title: Yup.string().required('informe um título'),
   description: Yup.string().required('informe uma descrição'),
-  localization: Yup.string().required(),
+  localization: Yup.string().required('informe uma localização'),
   date: Yup.date('informe uma data válida').required('informe uma data'),
-  image_id: Yup.number().required('selecione um banner'),
+  banner: Yup.number().required('selecione um banner'),
 });
 
 export default function MeetupEdit({ match }) {
