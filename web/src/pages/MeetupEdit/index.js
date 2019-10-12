@@ -1,10 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { Form, Input } from '@rocketseat/unform';
 import { MdAddCircleOutline } from 'react-icons/md';
 import * as Yup from 'yup';
 import { parseISO } from 'date-fns';
 
+import {
+  createMeetupRequest,
+  updateMeetupRequest,
+} from '~/store/modules/meetup/actions';
 import BannerInput from './BannerInput';
 import DatePicker from './DatePicker';
 import { Container } from './styles';
@@ -21,7 +25,8 @@ const schema = Yup.object().shape({
 
 export default function MeetupEdit({ match }) {
   const { id } = match.params;
-  const loading = useSelector(state => state.auth.loading);
+  const loading = useSelector(state => state.meetup.loading);
+  const dispatch = useDispatch();
   const [meetup, setMeetup] = useState({});
   const [description, setDescription] = useState('');
 
@@ -51,8 +56,12 @@ export default function MeetupEdit({ match }) {
     loadMeetupIfEditing();
   }, []); //eslint-disable-line
 
-  function handleSubmit() {
-    // send to update
+  function handleSubmit(data) {
+    if (id) {
+      dispatch(updateMeetupRequest(id, data));
+    } else {
+      dispatch(createMeetupRequest(data));
+    }
   }
 
   return (
