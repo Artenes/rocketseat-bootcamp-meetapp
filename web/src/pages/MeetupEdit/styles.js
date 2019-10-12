@@ -11,6 +11,11 @@ export const Container = styled.div`
     display: flex;
     flex-direction: column;
 
+    div.react-datepicker__input-container {
+      display: flex;
+      flex-direction: column;
+    }
+
     input,
     textarea {
       background: rgba(0, 0, 0, 0.2);
@@ -50,7 +55,7 @@ export const Container = styled.div`
       margin: 20px 0 19px;
     }
 
-    button {
+    > button {
       display: flex;
       align-items: center;
       justify-content: center;

@@ -3,17 +3,19 @@ import { useSelector } from 'react-redux';
 import { Form, Input } from '@rocketseat/unform';
 import { MdAddCircleOutline } from 'react-icons/md';
 import * as Yup from 'yup';
-import { format, parseISO } from 'date-fns';
+import { parseISO } from 'date-fns';
 
 import BannerInput from './BannerInput';
+import DatePicker from './DatePicker';
 import { Container } from './styles';
 import api from '~/services/api';
 
+// The data validation error message has no effect on react-datepicker
 const schema = Yup.object().shape({
   title: Yup.string().required(),
   description: Yup.string().required('informe uma descrição'),
   localization: Yup.string().required(),
-  date: Yup.date().required(),
+  date: Yup.date('informe uma data válida').required('informe uma data'),
   image_id: Yup.number().required('selecione um banner'),
 });
 
@@ -43,10 +45,7 @@ export default function MeetupEdit({ match }) {
       const data = response.data.find(m => m.id === Number(id));
       const date = parseISO(data.date);
 
-      setMeetup({
-        ...data,
-        date: format(date, "dd'/'MM'/'yyyy"),
-      });
+      setMeetup({ ...data, date });
     }
 
     loadMeetupIfEditing();
@@ -68,7 +67,7 @@ export default function MeetupEdit({ match }) {
           value={description}
           onChange={e => setDescription(e.target.value)}
         />
-        <Input type="text" name="date" placeholder="Data do meetup" />
+        <DatePicker name="date" placeholder="Data do meetup" />
         <Input type="text" name="localization" placeholder="Localização" />
 
         <button type="submit">
