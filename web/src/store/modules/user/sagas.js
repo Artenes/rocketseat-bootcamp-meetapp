@@ -17,20 +17,13 @@ export function* updateProfile({ payload }) {
 
     toast.success('Perfil atualizado');
     // backend does not send data back, but if it did no throw any error
-    // that means the form data is valid, so just use to update the store
+    // that means the form data is valid, so just use it to update the store
     yield put(updateProfileSuccess({ name, email }));
   } catch (error) {
-    // The proper way would be for the back-end to return a code to represent the error
-    // but for simplicity sake, we will check the error message and translate it
-    const message = error.response && error.response.data.error;
-
-    if (message === 'User already exists') {
-      toast.error('E-mail já em uso');
-    } else if (message === 'Password does not match') {
-      toast.error('Senha inválida');
-    } else {
-      toast.error('Erro ao atualizar perfil');
-    }
+    const message = error.response
+      ? error.response.data.error
+      : 'Erro de conexão';
+    toast.error(message);
     yield put(updateProfileFailure());
   }
 }

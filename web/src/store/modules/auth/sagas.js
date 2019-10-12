@@ -45,16 +45,10 @@ export function* signUp({ payload }) {
 
     yield createSession(email, password);
   } catch (error) {
-    // The proper way would be for the back-end to return a code to represent the error
-    // but for simplicity sake, we will check the error message and translate it
-    const emailInUse =
-      error.response && error.response.data.error === 'User already exists';
-    if (emailInUse) {
-      toast.error('E-mail já em uso');
-    } else {
-      toast.error('Falha no cadastro');
-    }
-
+    const message = error.response
+      ? error.response.data.error
+      : 'Erro de conexão';
+    toast.error(message);
     yield put(signFailure());
   }
 }
