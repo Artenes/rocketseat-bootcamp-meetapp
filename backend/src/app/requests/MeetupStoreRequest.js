@@ -29,15 +29,15 @@ class MeetupStoreRequest {
    */
   async isValid() {
     if (await this.isSchemaInvalid()) {
-      return badRequest('Invalid data provided');
+      return badRequest('Dados inválidos');
     }
 
     if (await this.imageDoesNotExists()) {
-      return badRequest('Image not found');
+      return badRequest('Banner não encontrado');
     }
 
     if (await this.isDateInPast()) {
-      return badRequest('Field date must be after today');
+      return badRequest('A data precisa ser depois de hoje');
     }
 
     return true;

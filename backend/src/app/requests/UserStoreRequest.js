@@ -29,11 +29,11 @@ class UserStoreRequest {
    */
   async isValid() {
     if (await this.isSchemaInvalid()) {
-      return badRequest('Invalid data provided');
+      return badRequest('Dados inválidos');
     }
 
     if (await this.isEmailInUse()) {
-      return badRequest('User already exists');
+      return badRequest('E-mail já em uso');
     }
 
     return true;

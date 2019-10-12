@@ -34,27 +34,27 @@ class MeetupUpdateRequest {
    */
   async isValid() {
     if (await this.meetupDoesNotExists()) {
-      return notFound('Meetup not found');
+      return notFound('Meetup não encontrado');
     }
 
     if (await this.doesNotBelongsToUser()) {
-      return unauthorized('Meetup not found');
+      return unauthorized('Meetup não encontrado');
     }
 
     if (await this.isMeetupInPast()) {
-      return badRequest('Cannot edit past meetups');
+      return badRequest('Não é possível editar meetups passadas');
     }
 
     if (await this.isSchemaInvalid()) {
-      return badRequest('Invalid data provided');
+      return badRequest('Data inválida');
     }
 
     if (await this.isDateInPast()) {
-      return badRequest('Field date must be after today');
+      return badRequest('Data precisa ser depois de hoje');
     }
 
     if (await this.imageDoesNotExists()) {
-      return badRequest('Image not found');
+      return badRequest('Imagem não encontrada');
     }
 
     return true;

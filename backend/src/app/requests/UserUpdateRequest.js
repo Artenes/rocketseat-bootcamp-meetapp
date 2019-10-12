@@ -41,23 +41,23 @@ class UserUpdateRequest {
    */
   async isValid() {
     if (await this.isSchemaInvalid()) {
-      return badRequest('Invalid data provided');
+      return badRequest('Dados inválidos');
     }
 
     if (await this.isEmailInUse()) {
-      return badRequest('User already exists');
+      return badRequest('E-mail já em uso');
     }
 
     if (await this.oldPasswordMissing()) {
-      return badRequest('Field oldPassword is required to change password');
+      return badRequest('Informe sua senha atual');
     }
 
     if (await this.confirmPasswordMissing()) {
-      return badRequest('Field confirmPassword is required to change password');
+      return badRequest('Confirme sua nova senha');
     }
 
     if (await this.isPasswordInvalid()) {
-      return unauthorized('Password does not match');
+      return unauthorized('Senha inválida');
     }
 
     return true;

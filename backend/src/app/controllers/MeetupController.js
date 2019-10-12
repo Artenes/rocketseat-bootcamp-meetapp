@@ -16,23 +16,13 @@ class MeetupController {
    * @param {Object} res the outgoing response.
    */
   async index(req, res) {
-    const rawMeetups = await Meetup.findAll({
+    const meetups = await Meetup.findAll({
       where: { user_id: req.userId },
       order: ['date'],
-      include: [{ model: File, as: 'banner', attributes: ['path', 'url'] }],
-    });
-
-    const meetups = rawMeetups.map(meetup => {
-      const { id, title, description, localization, date, banner } = meetup;
-
-      return {
-        id,
-        title,
-        description,
-        localization,
-        date,
-        banner: banner.url,
-      };
+      attributes: ['id', 'title', 'description', 'localization', 'date'],
+      include: [
+        { model: File, as: 'banner', attributes: ['path', 'url', 'id'] },
+      ],
     });
 
     return res.json(meetups);

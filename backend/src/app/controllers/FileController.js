@@ -29,9 +29,12 @@ class FileController {
 
     const { originalname: name, filename: path } = req.file;
 
-    await File.create({ name, path });
+    const file = await File.create({ name, path });
 
-    return res.sendStatus(201);
+    return res.status(201).json({
+      id: file.id,
+      url: file.url,
+    });
   }
 }
 
