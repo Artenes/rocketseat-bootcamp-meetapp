@@ -78,7 +78,7 @@ export default function Meetup({ match }) {
         </nav>
       </header>
       <div>
-        <img src={meetup.banner} alt={meetup.title} />
+        <img src={meetup.banner && meetup.banner.url} alt={meetup.title} />
         <p>{meetup.description}</p>
         <ul>
           <li>

@@ -15,7 +15,8 @@ export default function BannerInput({ name }) {
   // wait for the parent to send a valid defaultValue
   // since the component is rendered before the data is fetched from the api
   useEffect(() => {
-    setPreview(defaultValue);
+    setPreview(defaultValue && defaultValue.url);
+    setFile(defaultValue && defaultValue.id);
   }, [defaultValue]);
 
   async function handleChange(e) {
