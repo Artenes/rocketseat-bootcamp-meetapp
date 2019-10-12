@@ -42,7 +42,7 @@ export default function MeetupEdit({ match }) {
     }
 
     loadMeetupIfEditing();
-  }, [id]);
+  }, []); //eslint-disable-line
 
   function handleSubmit() {
     // send to update
@@ -51,7 +51,7 @@ export default function MeetupEdit({ match }) {
   return (
     <Container>
       <Form initialData={meetup} onSubmit={handleSubmit} schema={schema}>
-        <BannerInput name="image_id" />
+        <BannerInput name="banner" />
         <Input type="text" name="title" placeholder="Título do Meetup" />
         <Input
           multiline

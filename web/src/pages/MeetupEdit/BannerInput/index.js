@@ -9,8 +9,14 @@ import { Container } from './styles';
 export default function BannerInput({ name }) {
   const { fieldName, defaultValue, registerField, error } = useField(name);
 
-  const [preview, setPreview] = useState(defaultValue && defaultValue.url);
-  const [file, setFile] = useState(defaultValue && defaultValue.id);
+  const [preview, setPreview] = useState('');
+  const [file, setFile] = useState('');
+
+  // wait for the parent to send a valid defaultValue
+  // since the component is rendered before the data is fetched from the api
+  useEffect(() => {
+    setPreview(defaultValue);
+  }, [defaultValue]);
 
   async function handleChange(e) {
     const data = new FormData();
