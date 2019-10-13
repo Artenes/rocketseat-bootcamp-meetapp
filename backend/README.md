@@ -30,7 +30,7 @@
 
 ## About The Project
 
-REST API to help create, manage and list meetups about programming. This is not a flesh out product ot be used in production, it is just a demo application created during [Rocketseat's GoStack bootamp](https://rocketseat.com.br/bootcamp).
+REST API to help create, manage and list meetups about programming. This is not a flesh out product to be used in production, it is just a demo application created during [Rocketseat's GoStack bootamp](https://rocketseat.com.br/bootcamp).
 
 ### Built With
 
@@ -48,6 +48,7 @@ To get a local copy up and running follow these steps.
 * npm
 * yarn
 * Postgres database (recomend using a docker image for that)
+* Mailing service (for tests check [mailtrap.io](https://mailtrap.io))
 
 ### Installation
 
@@ -71,9 +72,9 @@ yarn
 cp .env.example .env
 ```
 
-5. Configure the .env file
+5. Configure the .env file (make sure to have your database running and an mailing service credentials at hand).
 
-6. Have a postegres database running and then run the migrations to create the tables
+6. Run the migrations to create the tables. Make sure the database you set in .env exists.
 ```sh
 yarn sequelize db:migrate
 ```
