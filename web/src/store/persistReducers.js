@@ -4,7 +4,7 @@ import { persistReducer } from 'redux-persist';
 export default reducers => {
   return persistReducer(
     {
-      key: 'gobarber',
+      key: 'io.github.artenes.meetapp',
       storage,
       whitelist: ['auth', 'user'],
     },
