@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { withNavigationFocus } from 'react-navigation';
 
@@ -7,22 +7,25 @@ import api from '~/services/api';
 import Background from '~/components/Background';
 import Appointment from '~/components/Appointment';
 import ActionBar from '~/components/ActionBar';
+import DateSelector from '~/components/DateSelector';
 
 import { Container, Title, List } from './styles';
 
 function Dashboard({ isFocused }) {
   const [appointments, setAppointments] = useState([]);
+  const [date, setDate] = useState(new Date());
 
   async function loadAppointments() {
-    const response = await api.get('appointments');
-    setAppointments(response.data);
+    //TODO call right endpoint from api
+    //const response = await api.get('appointments');
+    //setAppointments(response.data);
   }
 
   useEffect(() => {
     if (isFocused) {
       loadAppointments();
     }
-  }, [isFocused]);
+  }, [isFocused, date]);
 
   async function handleCancel(id) {
     const response = await api.delete(`appointments/${id}`);
@@ -42,7 +45,7 @@ function Dashboard({ isFocused }) {
     <Background>
       <Container>
         <ActionBar/>
-
+        <DateSelector date={date} onChange={newDate => setDate(newDate)}/>
         <List
           data={appointments}
           keyExtractor={item => String(item.id)}
