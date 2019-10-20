@@ -19,7 +19,9 @@
 ## Table of Contents
 
 * [About the Project](#about-the-project)
+  * [Target Platforms](#target-platforms)
   * [Built With](#built-with)
+  * [Tooling](#tooling)
 * [Getting Started](#getting-started)
   * [Prerequisites](#prerequisites)
   * [Installation](#installation)
@@ -32,7 +34,7 @@
 
 Mobile application made with react-native to browse and take part in meetups made for developers. This is not a flesh out product to be used in production, it is just a demo application created during [Rocketseat's GoStack bootamp](https://rocketseat.com.br/bootcamp).
 
-## Target platforms
+### Target Platforms
 
 - Android
 - IOs (**not tested, it will probably not work**)
@@ -44,6 +46,12 @@ If running the mobile app, do **it on Android**. No tests were made on an IPhone
 * [React Native](https://facebook.github.io/react-native/)
 * [Redux](https://redux.js.org/)
 * [Redux-Saga](https://redux-saga.js.org/)
+
+### Tooling
+
+* [Reactotron](https://github.com/infinitered/reactotron)
+* [Prettier](https://prettier.io/)
+* [ESLint](https://eslint.org/)
 
 ## Getting Started
 
