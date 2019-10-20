@@ -26,9 +26,16 @@ export const FormInput = styled(Input)`
 
 export const SubmitButton = styled(Button)`
   margin-top: 5px;
+  background: #E5556E;
+  height: 50px;
 `;
 
-export const LogoutButton = styled(Button)`
+export const LogoutButton = styled(Button).attrs({
+  textStyle: {
+    fontSize: 16
+  }
+})`
   margin-top: 10px;
-  background: #f64c75;
+  background: #D44059;
+  height: 42px;
 `;

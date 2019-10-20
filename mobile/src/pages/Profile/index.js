@@ -64,7 +64,7 @@ export default function Profile() {
             icon="person-outline"
             autoCorrect={false}
             autoCapitalize="none"
-            placeholder="Full name"
+            placeholder="Nome completo"
             returnKeyType="next"
             onSubmitEditing={() => emailRef.current.focus()}
             value={name}
@@ -76,7 +76,7 @@ export default function Profile() {
             keyboardType="email-address"
             autoCorrect={false}
             autoCapitalize="none"
-            placeholder="Type your e-mail"
+            placeholder="Digite seu e-mail"
             ref={emailRef}
             returnKeyType="next"
             onSubmitEditing={() => oldPasswordRef.current.focus()}
@@ -89,7 +89,7 @@ export default function Profile() {
           <FormInput
             icon="lock-outline"
             secureTextEntry
-            placeholder="Your current password"
+            placeholder="Senha atual"
             ref={oldPasswordRef}
             returnKeyType="next"
             onSubmitEditing={() => passwordRef.current.focus()}
@@ -100,7 +100,7 @@ export default function Profile() {
           <FormInput
             icon="lock-outline"
             secureTextEntry
-            placeholder="Your new password"
+            placeholder="Nova senha"
             ref={passwordRef}
             returnKeyType="next"
             onSubmitEditing={() => confirmPasswordRef.current.focus()}
@@ -111,7 +111,7 @@ export default function Profile() {
           <FormInput
             icon="lock-outline"
             secureTextEntry
-            placeholder="Confirm your password"
+            placeholder="Confirmação de senha"
             ref={confirmPasswordRef}
             returnKeyType="send"
             onSubmitEditing={handleSubmit}
@@ -119,8 +119,8 @@ export default function Profile() {
             onChangeText={setConfirmPassword}
           />
 
-          <SubmitButton onPress={handleSubmit}>Update profile</SubmitButton>
-          <LogoutButton onPress={handleLogout}>Log out</LogoutButton>
+          <SubmitButton onPress={handleSubmit}>Salvar perfil</SubmitButton>
+          <LogoutButton onPress={handleLogout}>Sair do Meetapp</LogoutButton>
         </Form>
       </Container>
     </Background>
