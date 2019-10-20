@@ -14,12 +14,14 @@ export function* updateProfile({ payload }) {
       ...(rest.oldPassword ? rest : {}),
     };
 
-    const response = yield call(api.put, 'users', profile);
+    yield call(api.put, 'users', profile);
 
-    Alert.alert('Profile updated', 'Your profile was updated');
-    yield put(updateProfileSuccess(response.data));
+    Alert.alert('Perfil atualizado', 'Seu perfil foi atualizado com sucesso');
+    // if data is valid, just put it back again in store
+    yield put(updateProfileSuccess({name, email}));
   } catch (error) {
-    Alert.alert('Profile update error', 'Verify your data');
+    const message = error.response ? error.response.data.error : 'Erro de conexão';
+    Alert.alert('Falha em atualizar perfil', message);
     yield put(updateProfileFailure());
   }
 }

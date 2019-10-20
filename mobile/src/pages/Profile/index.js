@@ -1,6 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import { Alert } from 'react-native';
+import * as Yup from 'yup';
 
 import {
   Container,
@@ -16,6 +18,28 @@ import Background from '~/components/Background';
 import ActionBar from '~/components/ActionBar';
 import { updateProfileRequest } from '~/store/modules/user/actions';
 import { signOut } from '~/store/modules/auth/actions';
+
+const thenPasswordIsRequired = (oldPassword, field) =>
+  oldPassword
+    ? field.required('informe a nova senha').min(6, 'a nova senha deve ter ao menos 6 dígitos')
+    : field;
+
+const thenConfirmPasswordIsRequired = (passwordField, field) =>
+  passwordField
+    ? field
+      .required('informe a senha novamente')
+      .oneOf([Yup.ref('password')], 'confirme sua senha novamente')
+    : field;
+
+const schema = Yup.object().shape({
+  confirmPassword: Yup.string().when('password', thenConfirmPasswordIsRequired),
+  password: Yup.string().when('oldPassword', thenPasswordIsRequired),
+  oldPassword: Yup.string(),
+  email: Yup.string()
+    .email('e-mail inválido')
+    .required('informe seu email'),
+  name: Yup.string().required('informe seu nome'),
+});
 
 export default function Profile() {
   const dispatch = useDispatch();
@@ -39,15 +63,21 @@ export default function Profile() {
   }, [profile]);
 
   function handleSubmit() {
-    dispatch(
-      updateProfileRequest({
-        name,
-        email,
-        oldPassword,
-        password,
-        confirmPassword,
-      })
-    );
+    const form = {
+      name,
+      email,
+      oldPassword,
+      password,
+      confirmPassword,
+    };
+
+    try {
+      schema.validateSync(form);
+      dispatch(updateProfileRequest(form));
+    } catch (validationError) {
+      Alert.alert('Falha em atualizar perfil', validationError.message);
+    }
+
   }
 
   function handleLogout() {
