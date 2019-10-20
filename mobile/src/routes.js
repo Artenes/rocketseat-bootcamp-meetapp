@@ -47,10 +47,10 @@ export default (isSigned = false) =>
               ),
               navigationOptions: {
                 tabBarVisible: false,
-                tabBarLabel: 'Schedule',
+                tabBarLabel: 'Inscrições',
                 tabBarIcon: (
                   <Icon
-                    name="add-circle-outline"
+                    name="local-offer"
                     size={20}
                     color="rgba(255, 255, 255, 0.6)"
                   />
@@ -66,8 +66,15 @@ export default (isSigned = false) =>
               activeTintColor: '#fff',
               inactiveTintColor: 'rgba(255, 255, 255, 0.6)',
               style: {
-                backgroundColor: '#8d41a8',
+                height: 64,
+                backgroundColor: '#2B1A2F',
+                paddingTop: 13,
+                paddingBottom: 13
               },
+              labelStyle: {
+                marginTop: 5,
+                fontSize: 12
+              }
             },
           }
         ),
