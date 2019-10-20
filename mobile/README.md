@@ -61,7 +61,6 @@ To get a local copy up and running follow these steps.
 
 * Have [java and android setup in your machine](https://www.decoide.org/react-native/docs/android-setup.html)
 * Have a real device with android connected via usb or an emulator ([Genymotion is recomended](https://www.genymotion.com))
-* Have the [cli for react-native](https://medium.com/@mohitaunni/react-native-cli-explained-for-beginners-4725a271c30d)
 * Have the [backend set up](https://github.com/Artenes/rocketseat-bootcamp-meetapp/tree/master/backend)
 
 ### Installation
@@ -97,12 +96,12 @@ adb reverse tcp:9090 tcp:9090
 
 6. Run the app
 ```sh
-react-native run-android
+yarn android
 ```
 
 For consecutive runs just call
 ```sh
-react-native start
+yarn start
 ```
 
 ## Features
