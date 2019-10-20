@@ -26,15 +26,15 @@ class SessionStoreRequest {
    */
   async isValid() {
     if (await this.isSchemaInvalid()) {
-      return badRequest('Invalid data provided');
+      return badRequest('Credenciais inválidas');
     }
 
     if (await this.userDoesNotExists()) {
-      return badRequest('User not found');
+      return badRequest('Usuário não encontrado');
     }
 
     if (await this.isPasswordInvalid()) {
-      return unauthorized('Invalid password');
+      return unauthorized('Senha inválida');
     }
 
     return true;
