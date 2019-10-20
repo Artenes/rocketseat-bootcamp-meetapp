@@ -7,14 +7,6 @@ export const Container = styled.SafeAreaView`
   flex: 1;
 `;
 
-export const Title = styled.Text`
-  font-size: 20px;
-  color: #fff;
-  font-weight: bold;
-  align-self: center;
-  margin-top: 30px;
-`;
-
 export const Separator = styled.View`
   height: 1px;
   background: rgba(255, 255, 255, 0.2);

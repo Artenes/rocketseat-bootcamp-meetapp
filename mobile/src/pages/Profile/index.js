@@ -13,6 +13,7 @@ import {
 } from './styles';
 
 import Background from '~/components/Background';
+import ActionBar from '~/components/ActionBar';
 import { updateProfileRequest } from '~/store/modules/user/actions';
 import { signOut } from '~/store/modules/auth/actions';
 
@@ -56,7 +57,7 @@ export default function Profile() {
   return (
     <Background>
       <Container>
-        <Title>My profile</Title>
+        <ActionBar/>
 
         <Form>
           <FormInput
