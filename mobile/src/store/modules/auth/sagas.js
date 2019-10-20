@@ -16,21 +16,14 @@ export function* signIn({ payload }) {
 
     const { token, user } = response.data;
 
-    if (user.provider) {
-      Alert.alert('Login error', 'User can not be provider');
-      return;
-    }
-
     api.defaults.headers.Authorization = `Bearer ${token}`;
 
     // used to delay an execution
     // yield delay(3000);
 
     yield put(signInSuccess(token, user));
-
-    // history.push('/dashboard');
   } catch (error) {
-    Alert.alert('SignIn failure', 'Verify your data');
+    Alert.alert('Falha no SignIn', 'Credenciais inválidas');
     yield put(signFailure());
   }
 }
