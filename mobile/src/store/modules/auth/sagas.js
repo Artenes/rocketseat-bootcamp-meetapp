@@ -23,7 +23,8 @@ export function* signIn({ payload }) {
 
     yield put(signInSuccess(token, user));
   } catch (error) {
-    Alert.alert('Falha no SignIn', 'Credenciais inválidas');
+    const message = error.response ? error.response.data.error : 'Erro de conexão';
+    Alert.alert('Falha no SignIn', message);
     yield put(signFailure());
   }
 }
@@ -38,11 +39,21 @@ export function* signUp({ payload }) {
       password,
     });
 
-    yield put(signUpSuccess());
+    // sign in the user after sign up
+    const response = yield call(api.post, 'sessions', {
+      email,
+      password,
+    });
 
-    // history.push('/');
+    const { token, user } = response.data;
+
+    api.defaults.headers.Authorization = `Bearer ${token}`;
+
+    yield put(signUpSuccess());
+    yield put(signInSuccess(token, user));
   } catch (error) {
-    Alert.alert('SignUp failure', 'Verify your data');
+    const message = error.response ? error.response.data.error : 'Erro de conexão';
+    Alert.alert('Falha no SignUp', message);
     yield put(signFailure());
   }
 }
