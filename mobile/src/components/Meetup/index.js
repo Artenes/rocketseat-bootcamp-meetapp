@@ -14,7 +14,7 @@ import {
   InscriptionButton,
 } from './styles';
 
-export default function Meetup({ data, canRegister, onClick }) {
+export default function Meetup({ data, canRegister, onClick, loading }) {
   const date = parseISO(data.date);
 
   // date-fns does not capitalize months: https://github.com/date-fns/date-fns/issues/674
@@ -43,7 +43,10 @@ export default function Meetup({ data, canRegister, onClick }) {
           <Icon name="person" size={14} color="#999999" />
           <InfoText>Organizador: {data.organizer.name}</InfoText>
         </InfoRow>
-        <InscriptionButton canRegister={canRegister} onPress={onClick}>
+        <InscriptionButton
+          canRegister={canRegister}
+          onPress={onClick}
+          loading={loading}>
           {canRegister ? 'Realizar inscriçao' : 'Cancelar inscrição'}
         </InscriptionButton>
       </InfoContainer>
@@ -63,4 +66,5 @@ Meetup.propTypes = {
   }).isRequired,
   canRegister: PropTypes.bool.isRequired,
   onClick: PropTypes.func.isRequired,
+  loading: PropTypes.bool.isRequired,
 };

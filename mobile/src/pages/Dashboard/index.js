@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { ActivityIndicator } from 'react-native';
+import { ActivityIndicator, Alert } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { withNavigationFocus } from 'react-navigation';
 import { format } from 'date-fns';
@@ -18,6 +18,7 @@ function Dashboard() {
   const [date, setDate] = useState(new Date());
   const [page, setPage] = useState(0);
   const [loadingDay, setLoadingDay] = useState(false);
+  const [registering, setRegistering] = useState(false);
 
   function loadMeetups(nextPage) {
     const inDay = format(date, 'yyyy-MM-dd');
@@ -43,7 +44,21 @@ function Dashboard() {
     loadDay();
   }, [date]);
 
-  async function handleInscription() {}
+  async function handleInscription(meetup) {
+    try {
+      setRegistering(true);
+      await api.post('registrations', {
+        meetup_id: meetup.id,
+      });
+      Alert.alert('Inscrição realizada com sucesso');
+    } catch (error) {
+      const message = error.response
+        ? error.response.data.error
+        : 'Erro de conexão';
+      Alert.alert('Falha na inscrição', message);
+    }
+    setRegistering(false);
+  }
 
   return (
     <Background>
@@ -64,7 +79,12 @@ function Dashboard() {
             onEndReachedThreshold={0.2}
             onEndReached={loadMoreMeetups}
             renderItem={({ item }) => (
-              <Meetup data={item} onClick={handleInscription} canRegister />
+              <Meetup
+                data={item}
+                onClick={() => handleInscription(item)}
+                loading={registering}
+                canRegister
+              />
             )}
           />
         )}

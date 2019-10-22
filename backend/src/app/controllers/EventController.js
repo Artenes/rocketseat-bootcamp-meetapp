@@ -34,7 +34,7 @@ class EventController {
       offset: (page - 1) * perPage,
       limit: perPage,
       where,
-      attributes: ['title', 'description', 'localization', 'date'],
+      attributes: ['id', 'title', 'description', 'localization', 'date'],
       include: [
         { model: User, as: 'organizer', attributes: ['name', 'email'] },
         { model: File, as: 'banner', attributes: ['path', 'url'] },
@@ -44,6 +44,7 @@ class EventController {
     // retarded solution just to make banner points to an url
     const meetups = rawMeetups.map(meetup => {
       const {
+        id,
         title,
         description,
         date,
@@ -53,6 +54,7 @@ class EventController {
       } = meetup;
 
       return {
+        id,
         title,
         description,
         date,

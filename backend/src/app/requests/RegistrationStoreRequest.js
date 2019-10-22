@@ -26,20 +26,20 @@ class RegistrationStoreRequest {
    */
   async isValid() {
     if (await this.meetupDoesNotExists()) {
-      return notFound('Meetup not found');
+      return notFound('Meetup não encontrada');
     }
 
     if (await this.belongsToUser()) {
-      return unauthorized('Can not register in your own meetup');
+      return unauthorized('Não é possível inscrever-se em sua própria meetup');
     }
 
     if (await this.isMeetupInPast()) {
-      return badRequest('Cannot register in past meetups');
+      return badRequest('Não é possível inscrever-se em meetups passadas');
     }
 
     if (await this.isBusyAtTime()) {
       return badRequest(
-        'Already registered in a meetup that will happen at the same time'
+        'Já inscrito em outro meetup que irá acontecer no mesmo horário'
       );
     }
 
