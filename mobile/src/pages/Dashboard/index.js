@@ -19,9 +19,7 @@ function Dashboard({ isFocused }) {
 
   async function loadMeetups() {
     const inDay = format(date, 'yyyy-MM-dd');
-    const response = await api.get('events', {
-      date: inDay,
-    });
+    const response = await api.get(`events?date=${inDay}`);
     setMeetups(response.data);
   }
 
