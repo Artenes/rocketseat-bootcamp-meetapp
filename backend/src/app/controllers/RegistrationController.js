@@ -24,7 +24,10 @@ class RegistrationController {
           model: Meetup,
           where: { date: { [Op.gt]: new Date() } },
           required: true,
-          include: [{ model: File, as: 'banner' }],
+          include: [
+            { model: File, as: 'banner' },
+            { model: User, as: 'organizer', attributes: ['name', 'email'] },
+          ],
         },
       ],
       order: [[Meetup, 'date']],
@@ -39,6 +42,7 @@ class RegistrationController {
         localization,
         date,
         banner,
+        organizer,
       } = registration.Meetup;
 
       return {
@@ -48,6 +52,7 @@ class RegistrationController {
         localization,
         date,
         banner: banner.url,
+        organizer,
       };
     });
 
