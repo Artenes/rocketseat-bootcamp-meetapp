@@ -16,11 +16,13 @@ import { Container, List } from './styles';
 function Dashboard({ isFocused }) {
   const [meetups, setMeetups] = useState([]);
   const [date, setDate] = useState(new Date());
+  const [page, setPage] = useState(0);
 
   async function loadMeetups() {
+    setPage(page + 1);
     const inDay = format(date, 'yyyy-MM-dd');
-    const response = await api.get(`events?date=${inDay}`);
-    setMeetups(response.data);
+    const response = await api.get(`events?date=${inDay}&page=${page}`);
+    setMeetups([...meetups, ...response.data]);
   }
 
   useEffect(() => {
@@ -39,6 +41,8 @@ function Dashboard({ isFocused }) {
         <List
           data={meetups}
           keyExtractor={item => String(item.title)}
+          onEndReachedThreshold={0.2}
+          onEndReached={loadMeetups}
           renderItem={({ item }) => (
             <Meetup data={item} onClick={handleInscription} canRegister />
           )}
