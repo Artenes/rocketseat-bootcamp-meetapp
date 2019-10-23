@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, Alert } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import { withNavigationFocus } from 'react-navigation';
+import PropTypes from 'prop-types';
 
 import api from '~/services/api';
 
@@ -10,7 +12,7 @@ import Meetup from '~/components/Meetup';
 
 import { Container, List, NoMeetup, NoMeetupText } from './styles';
 
-export default function Inscriptions() {
+function Inscriptions({ isFocused }) {
   const [meetups, setMeetups] = useState([]);
   const [loading, setLoading] = useState(true);
   const [canceling, setCanceling] = useState(false);
@@ -21,21 +23,22 @@ export default function Inscriptions() {
       setMeetups(response.data);
       setLoading(false);
     }
-    loadMeetups();
-  }, []);
+    if (isFocused) {
+      loadMeetups();
+    }
+  }, [isFocused]);
 
   async function handleCancenlation(meetup) {
     try {
       setCanceling(true);
-      // await api.post('registrations', {
-      //   meetup_id: meetup.id,
-      // });
+      await api.delete(`registrations/${meetup.id}`);
+      setMeetups(meetups.filter(m => m.id !== meetup.id));
       Alert.alert('Inscrição cancelada com sucesso');
     } catch (error) {
       const message = error.response
         ? error.response.data.error
         : 'Erro de conexão';
-      Alert.alert('Falha na inscrição', message);
+      Alert.alert('Falha ao cancelar', message);
     }
     setCanceling(false);
   }
@@ -76,3 +79,9 @@ Inscriptions.navigationOptions = {
     <Icon name="local-offer" size={20} color={tintColor} />
   ),
 };
+
+Inscriptions.propTypes = {
+  isFocused: PropTypes.bool.isRequired,
+};
+
+export default withNavigationFocus(Inscriptions);

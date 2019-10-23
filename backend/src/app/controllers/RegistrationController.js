@@ -97,6 +97,28 @@ class RegistrationController {
 
     return res.sendStatus(201);
   }
+
+  /**
+   * Delets a registration.
+   *
+   * @param {Object} req the incoming request.
+   * @param {Object} res the outgoing response.
+   */
+  async delete(req, res) {
+    const { meetupid } = req.params;
+
+    const registration = await Registration.findOne({
+      where: { meetup_id: meetupid, user_id: req.userId },
+    });
+
+    if (!registration) {
+      return res.status(404).json({ error: 'Meetup não encontrado' });
+    }
+
+    await registration.destroy();
+
+    return res.json({ id: registration.id, meetup: registration.meetup_id });
+  }
 }
 
 export default new RegistrationController();
