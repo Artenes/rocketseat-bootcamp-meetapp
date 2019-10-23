@@ -19,8 +19,10 @@ export default function Button({ children, loading, textStyle, ...rest }) {
 Button.propTypes = {
   children: PropTypes.string.isRequired,
   loading: PropTypes.bool,
+  textStyle: PropTypes.shape(),
 };
 
 Button.defaultProps = {
   loading: false,
+  textStyle: {},
 };

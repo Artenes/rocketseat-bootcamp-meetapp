@@ -6,7 +6,6 @@ import * as Yup from 'yup';
 
 import {
   Container,
-  Title,
   Separator,
   Form,
   FormInput,
@@ -21,14 +20,16 @@ import { signOut } from '~/store/modules/auth/actions';
 
 const thenPasswordIsRequired = (oldPassword, field) =>
   oldPassword
-    ? field.required('informe a nova senha').min(6, 'a nova senha deve ter ao menos 6 dígitos')
+    ? field
+        .required('informe a nova senha')
+        .min(6, 'a nova senha deve ter ao menos 6 dígitos')
     : field;
 
 const thenConfirmPasswordIsRequired = (passwordField, field) =>
   passwordField
     ? field
-      .required('informe a senha novamente')
-      .oneOf([Yup.ref('password')], 'confirme sua senha novamente')
+        .required('informe a senha novamente')
+        .oneOf([Yup.ref('password')], 'confirme sua senha novamente')
     : field;
 
 const schema = Yup.object().shape({
@@ -77,7 +78,6 @@ export default function Profile() {
     } catch (validationError) {
       Alert.alert('Falha em atualizar perfil', validationError.message);
     }
-
   }
 
   function handleLogout() {
@@ -87,7 +87,7 @@ export default function Profile() {
   return (
     <Background>
       <Container>
-        <ActionBar/>
+        <ActionBar />
 
         <Form>
           <FormInput

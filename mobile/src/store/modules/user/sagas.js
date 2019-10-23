@@ -18,9 +18,11 @@ export function* updateProfile({ payload }) {
 
     Alert.alert('Perfil atualizado', 'Seu perfil foi atualizado com sucesso');
     // if data is valid, just put it back again in store
-    yield put(updateProfileSuccess({name, email}));
+    yield put(updateProfileSuccess({ name, email }));
   } catch (error) {
-    const message = error.response ? error.response.data.error : 'Erro de conexão';
+    const message = error.response
+      ? error.response.data.error
+      : 'Erro de conexão';
     Alert.alert('Falha em atualizar perfil', message);
     yield put(updateProfileFailure());
   }

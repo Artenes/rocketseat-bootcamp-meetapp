@@ -13,7 +13,7 @@ import Meetup from '~/components/Meetup';
 
 import { Container, List, NoMeetup, NoMeetupText } from './styles';
 
-function Dashboard() {
+function Meetups() {
   const [meetups, setMeetups] = useState([]);
   const [date, setDate] = useState(new Date());
   const [page, setPage] = useState(0);
@@ -86,11 +86,11 @@ function Dashboard() {
   );
 }
 
-Dashboard.navigationOptions = {
+Meetups.navigationOptions = {
   tabBarLabel: 'Meetups',
   tabBarIcon: ({ tintColor }) => (
     <Icon name="format-list-bulleted" size={20} color={tintColor} />
   ),
 };
 
-export default withNavigationFocus(Dashboard);
+export default withNavigationFocus(Meetups);

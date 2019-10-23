@@ -23,7 +23,9 @@ export function* signIn({ payload }) {
 
     yield put(signInSuccess(token, user));
   } catch (error) {
-    const message = error.response ? error.response.data.error : 'Erro de conexão';
+    const message = error.response
+      ? error.response.data.error
+      : 'Erro de conexão';
     Alert.alert('Falha no SignIn', message);
     yield put(signFailure());
   }
@@ -52,7 +54,9 @@ export function* signUp({ payload }) {
     yield put(signUpSuccess());
     yield put(signInSuccess(token, user));
   } catch (error) {
-    const message = error.response ? error.response.data.error : 'Erro de conexão';
+    const message = error.response
+      ? error.response.data.error
+      : 'Erro de conexão';
     Alert.alert('Falha no SignUp', message);
     yield put(signFailure());
   }
