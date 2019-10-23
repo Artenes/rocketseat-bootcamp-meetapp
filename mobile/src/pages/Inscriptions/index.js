@@ -15,7 +15,6 @@ import { Container, List, NoMeetup, NoMeetupText } from './styles';
 function Inscriptions({ isFocused }) {
   const [meetups, setMeetups] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [canceling, setCanceling] = useState(false);
 
   useEffect(() => {
     async function loadMeetups() {
@@ -30,17 +29,20 @@ function Inscriptions({ isFocused }) {
 
   async function handleCancenlation(meetup) {
     try {
-      setCanceling(true);
       await api.delete(`registrations/${meetup.id}`);
       setMeetups(meetups.filter(m => m.id !== meetup.id));
       Alert.alert('Inscrição cancelada com sucesso');
+      // we return false for the component not try to update any state
+      // since it was removed from the list at this point
+      return false;
     } catch (error) {
       const message = error.response
         ? error.response.data.error
         : 'Erro de conexão';
       Alert.alert('Falha ao cancelar', message);
+      // we return true for the component update its loading state
+      return true;
     }
-    setCanceling(false);
   }
 
   return (
@@ -61,8 +63,7 @@ function Inscriptions({ isFocused }) {
             renderItem={({ item }) => (
               <Meetup
                 data={item}
-                onClick={() => handleCancenlation(item)}
-                loading={canceling}
+                onClick={handleCancenlation}
                 canRegister={false}
               />
             )}

@@ -18,7 +18,6 @@ function Dashboard() {
   const [date, setDate] = useState(new Date());
   const [page, setPage] = useState(0);
   const [loadingDay, setLoadingDay] = useState(false);
-  const [registering, setRegistering] = useState(false);
 
   function loadMeetups(nextPage) {
     const inDay = format(date, 'yyyy-MM-dd');
@@ -46,7 +45,6 @@ function Dashboard() {
 
   async function handleInscription(meetup) {
     try {
-      setRegistering(true);
       await api.post('registrations', {
         meetup_id: meetup.id,
       });
@@ -57,7 +55,7 @@ function Dashboard() {
         : 'Erro de conexão';
       Alert.alert('Falha na inscrição', message);
     }
-    setRegistering(false);
+    return true;
   }
 
   return (
@@ -79,12 +77,7 @@ function Dashboard() {
             onEndReachedThreshold={0.2}
             onEndReached={loadMoreMeetups}
             renderItem={({ item }) => (
-              <Meetup
-                data={item}
-                onClick={() => handleInscription(item)}
-                loading={registering}
-                canRegister
-              />
+              <Meetup data={item} onClick={handleInscription} canRegister />
             )}
           />
         )}

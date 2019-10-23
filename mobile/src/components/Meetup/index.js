@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { format, parseISO } from 'date-fns';
 import pt from 'date-fns/locale/pt-BR';
@@ -14,7 +14,8 @@ import {
   InscriptionButton,
 } from './styles';
 
-export default function Meetup({ data, canRegister, onClick, loading }) {
+export default function Meetup({ data, canRegister, onClick }) {
+  const [loading, setLoading] = useState(false);
   const date = parseISO(data.date);
 
   // date-fns does not capitalize months: https://github.com/date-fns/date-fns/issues/674
@@ -25,6 +26,14 @@ export default function Meetup({ data, canRegister, onClick, loading }) {
   const capitalizedMonth = month.charAt(0).toUpperCase() + month.slice(1);
 
   const formattedDate = `${day} de ${capitalizedMonth}, às ${hour}h`;
+
+  async function handleClick() {
+    setLoading(true);
+    const hadError = await onClick(data);
+    if (hadError) {
+      setLoading(false);
+    }
+  }
 
   return (
     <Container>
@@ -45,7 +54,7 @@ export default function Meetup({ data, canRegister, onClick, loading }) {
         </InfoRow>
         <InscriptionButton
           canRegister={canRegister}
-          onPress={onClick}
+          onPress={handleClick}
           loading={loading}>
           {canRegister ? 'Realizar inscriçao' : 'Cancelar inscrição'}
         </InscriptionButton>
@@ -66,5 +75,4 @@ Meetup.propTypes = {
   }).isRequired,
   canRegister: PropTypes.bool.isRequired,
   onClick: PropTypes.func.isRequired,
-  loading: PropTypes.bool.isRequired,
 };
