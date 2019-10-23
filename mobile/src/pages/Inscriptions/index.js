@@ -59,7 +59,7 @@ function Inscriptions({ isFocused }) {
         {!loading && (
           <List
             data={meetups}
-            keyExtractor={item => String(item.title)}
+            keyExtractor={item => String(item.registration_id)}
             renderItem={({ item }) => (
               <Meetup
                 data={item}

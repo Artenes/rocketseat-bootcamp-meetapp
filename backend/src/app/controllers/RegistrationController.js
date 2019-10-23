@@ -46,6 +46,7 @@ class RegistrationController {
       } = registration.Meetup;
 
       return {
+        registration_id: registration.id,
         id,
         title,
         description,
