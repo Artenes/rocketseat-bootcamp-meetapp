@@ -26,7 +26,7 @@ export default (isSigned = false) =>
           {
             resetOnBlur: true,
             tabBarOptions: {
-              keyboardHidesTabBar: true,
+              keyboardHidesTabBar: false,
               activeTintColor: '#fff',
               inactiveTintColor: 'rgba(255, 255, 255, 0.4)',
               style: {
