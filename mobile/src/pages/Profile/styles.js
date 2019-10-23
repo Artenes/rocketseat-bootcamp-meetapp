@@ -15,7 +15,7 @@ export const Separator = styled.View`
 
 export const Form = styled.ScrollView.attrs({
   showsVerticalScrollIndicator: false,
-  contentContainerStyle: { padding: 30 },
+  contentContainerStyle: { padding: 20 },
 })`
   align-self: stretch;
 `;
@@ -26,16 +26,16 @@ export const FormInput = styled(Input)`
 
 export const SubmitButton = styled(Button)`
   margin-top: 5px;
-  background: #E5556E;
+  background: #e5556e;
   height: 50px;
 `;
 
 export const LogoutButton = styled(Button).attrs({
   textStyle: {
-    fontSize: 16
-  }
+    fontSize: 16,
+  },
 })`
   margin-top: 10px;
-  background: #D44059;
+  background: #d44059;
   height: 42px;
 `;

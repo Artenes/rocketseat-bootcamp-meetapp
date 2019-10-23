@@ -5,7 +5,7 @@ import Button from '~/components/Button';
 export const Container = styled.View`
   background: #fff;
   border-radius: 4px;
-  margin-bottom: 30px;
+  margin-bottom: 20px;
 `;
 
 export const Banner = styled.Image`

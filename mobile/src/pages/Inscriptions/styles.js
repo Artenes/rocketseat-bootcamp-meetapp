@@ -6,7 +6,7 @@ export const Container = styled.SafeAreaView`
 
 export const List = styled.FlatList.attrs({
   showsVerticalScrollIndicator: false,
-  contentContainerStyle: { padding: 30 },
+  contentContainerStyle: { padding: 20 },
 })``;
 
 export const NoMeetup = styled.View`
