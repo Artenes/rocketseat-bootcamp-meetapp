@@ -4,10 +4,6 @@ import {
   format,
   addDays,
   subDays,
-  isBefore,
-  setHours,
-  setMinutes,
-  setSeconds,
 } from 'date-fns';
 import pt from 'date-fns/locale/pt-BR';
 
@@ -24,15 +20,7 @@ export default function DateSelector({ date, onChange }) {
   }, [date]);
 
   function handlePreviousDay() {
-    const previousDay = setSeconds(
-      setMinutes(setHours(subDays(date, 1), 0), 0),
-      0
-    );
-    const today = setSeconds(setMinutes(setHours(new Date(), 0), 0), 0);
-    const isYesterday = isBefore(previousDay, today);
-    if (!isYesterday) {
-      onChange(previousDay);
-    }
+    onChange(subDays(date, 1));
   }
 
   function handleNextDay() {
