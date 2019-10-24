@@ -39,6 +39,7 @@ class EventController {
         { model: User, as: 'organizer', attributes: ['name', 'email'] },
         { model: File, as: 'banner', attributes: ['path', 'url'] },
       ],
+      order: [['date', 'DESC']],
     });
 
     // retarded solution just to make banner points to an url

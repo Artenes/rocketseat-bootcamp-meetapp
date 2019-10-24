@@ -18,6 +18,7 @@ function Meetups() {
   const [date, setDate] = useState(new Date());
   const [page, setPage] = useState(0);
   const [loadingDay, setLoadingDay] = useState(false);
+  const [loadingMore, setLoadingMore] = useState(false);
 
   function loadMeetups(nextPage) {
     const inDay = format(date, 'yyyy-MM-dd');
@@ -25,10 +26,14 @@ function Meetups() {
   }
 
   async function loadMoreMeetups() {
+    setLoadingMore(true);
     const nextPage = page + 1;
     const response = await loadMeetups(nextPage);
-    setMeetups([...meetups, ...response.data]);
+    if (response.data.length > 0) {
+      setMeetups([...meetups, ...response.data]);
+    }
     setPage(nextPage);
+    setLoadingMore(false);
   }
 
   useEffect(() => {
@@ -81,6 +86,7 @@ function Meetups() {
             )}
           />
         )}
+        {loadingMore && <ActivityIndicator />}
       </Container>
     </Background>
   );
