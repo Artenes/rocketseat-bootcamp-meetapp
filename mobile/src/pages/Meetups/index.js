@@ -73,7 +73,7 @@ function Meetups() {
         {!loadingDay && (
           <List
             data={meetups}
-            keyExtractor={item => String(item.title)}
+            keyExtractor={item => String(item.id)}
             onEndReachedThreshold={0.2}
             onEndReached={loadMoreMeetups}
             renderItem={({ item }) => (
