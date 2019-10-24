@@ -24,7 +24,10 @@ class RegistrationController {
           model: Meetup,
           where: { date: { [Op.gt]: new Date() } },
           required: true,
-          include: [{ model: File, as: 'banner' }],
+          include: [
+            { model: File, as: 'banner' },
+            { model: User, as: 'organizer', attributes: ['name', 'email'] },
+          ],
         },
       ],
       order: [[Meetup, 'date']],
@@ -39,15 +42,18 @@ class RegistrationController {
         localization,
         date,
         banner,
+        organizer,
       } = registration.Meetup;
 
       return {
+        registration_id: registration.id,
         id,
         title,
         description,
         localization,
         date,
         banner: banner.url,
+        organizer,
       };
     });
 
@@ -91,6 +97,28 @@ class RegistrationController {
     });
 
     return res.sendStatus(201);
+  }
+
+  /**
+   * Delets a registration.
+   *
+   * @param {Object} req the incoming request.
+   * @param {Object} res the outgoing response.
+   */
+  async delete(req, res) {
+    const { meetupid } = req.params;
+
+    const registration = await Registration.findOne({
+      where: { meetup_id: meetupid, user_id: req.userId },
+    });
+
+    if (!registration) {
+      return res.status(404).json({ error: 'Meetup não encontrado' });
+    }
+
+    await registration.destroy();
+
+    return res.json({ id: registration.id, meetup: registration.meetup_id });
   }
 }
 

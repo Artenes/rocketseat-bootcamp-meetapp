@@ -32,5 +32,6 @@ routes.delete('/meetups/:id', MeetupController.delete);
 
 routes.get('/registrations', RegistrationController.index);
 routes.post('/registrations', RegistrationController.store);
+routes.delete('/registrations/:meetupid', RegistrationController.delete);
 
 export default routes;
