@@ -92,6 +92,11 @@ cp .env.example .env
 yarn sequelize db:migrate
 ```
 
+You can also run a seeder to setup some test data.
+```sh
+yarn sequelize db:seed:all
+```
+
 7. Run the server
 ```sh
 yarn dev
