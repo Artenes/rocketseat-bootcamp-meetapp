@@ -4,7 +4,7 @@ import { persistReducer } from 'redux-persist';
 export default reducers => {
   return persistReducer(
     {
-      key: 'meetapp',
+      key: 'io.github.artenes.meetapp',
       storage: AsyncStorage,
       whitelist: ['auth', 'user'],
     },
