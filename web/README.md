@@ -20,6 +20,7 @@
 
 * [About the Project](#about-the-project)
   * [Built With](#built-with)
+  * [Tooling](#tooling)
 * [Getting Started](#getting-started)
   * [Prerequisites](#prerequisites)
   * [Installation](#installation)
@@ -37,6 +38,12 @@ Web application made in React to create and manage meetups. This is not a flesh 
 * [React JS](https://reactjs.org/)
 * [Redux](https://redux.js.org/)
 * [Redux-Saga](https://redux-saga.js.org/)
+
+### Tooling
+
+* [Reactotron](https://github.com/infinitered/reactotron)
+* [Prettier](https://prettier.io/)
+* [ESLint](https://eslint.org/)
 
 ## Getting Started
 
