@@ -153,6 +153,8 @@ yarn start
 
 In the end all 3 apps must be up and running ready to be used.
 
+You can create an user to start using the app, but by running the seed mentioned above you can login in the app with one of these 3 emails: `monique@email.com`, `diego@email.com` or `sereny@email.com`. The password for them is `secret`.
+
 ## Contributing
 
 Contributions are welcome, even though this was made only for learning purposes.
