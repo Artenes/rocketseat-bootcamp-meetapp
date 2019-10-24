@@ -46,7 +46,7 @@ A SPA web application made in [React JS](https://reactjs.org/). This is where me
 
 #### [Mobile](https://github.com/Artenes/rocketseat-bootcamp-meetapp/tree/master/mobile)
 
-A mobile application made with [React Native](https://facebook.github.io/react-native/). This is where attendees goes to browse and subscribe to meetups. **Only the android version of the app was tested. The IOs version might not work properly**.
+A mobile application made with [React Native](https://facebook.github.io/react-native/). This is where attendees goes to browse and subscribe to meetups. **Only the android version of the app was tested. The IOs version might not work properly, so use the Android version to check out the mobile application**.
 
 ## Getting Started
 
