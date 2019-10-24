@@ -108,23 +108,23 @@ yarn start
 
 ### SignUp
 Allows users to create an account.
-![Signup](images/signup.jpg)
+![Signup](images/signup.png)
 
 ### SignIn
 Allows users to enter in the application.
-![Signup](images/signin.jpg)
+![Signup](images/signin.png)
 
-### Dashborad
+### Meetups
 Displays a list of the meetups available to take part in.
-![Signup](images/dashboard.jpg)
+![Signup](images/meetups.png)
 
-### Registrations
+### Inscriptions
 Shows meetups where user took part.
-![Signup](images/registrations.jpg)
+![Signup](images/inscriptions.png)
 
 ### Profile
 Shows user data and allow to edit them.
-![Signup](images/profile.jpg)
+![Signup](images/profile.png)
 
 ## Contributing
 
