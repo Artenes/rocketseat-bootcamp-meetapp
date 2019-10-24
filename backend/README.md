@@ -79,7 +79,12 @@ cp .env.example .env
 yarn sequelize db:migrate
 ```
 
-7. Run the server
+7. You can optionally run a seed to put some data in the database.
+```sh
+yarn sequelize db:seed:all
+```
+
+8. Run the server
 ```sh
 yarn dev
 ```
