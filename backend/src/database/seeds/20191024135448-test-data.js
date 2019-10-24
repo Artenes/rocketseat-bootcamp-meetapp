@@ -63,52 +63,25 @@ module.exports = {
 
     const users = (await queryInterface.sequelize.query('SELECT id FROM users ORDER BY id DESC LIMIT 3'))[0];
 
-    return queryInterface.bulkInsert('meetups', [
-      // already happened
-      {
-        title: 'Node Js meetup',
-        description: 'Evento sobre Node JS',
-        localization: 'Rua silveira, 25',
-        date: new Date(),
-        image_id: files[0].id,
-        user_id: users[0].id,
-        created_at: new Date(),
-        updated_at: new Date(),
-      },
-      // happens today
-      {
-        title: 'React Js meetup',
-        description: 'Evento sobre React JS',
-        localization: 'Estrada japonesa, 90',
-        date: datefns.setHours(new Date(), 23),
-        image_id: files[1].id,
-        user_id: users[1].id,
-        created_at: new Date(),
-        updated_at: new Date(),
-      },
-      // happens tomorow
-      {
-        title: 'React Native meetup',
-        description: 'Evento sobre React Native',
-        localization: 'Cruzamento Rheiq, 190',
-        date: datefns.addDays(new Date(), 1),
-        image_id: files[0].id,
-        user_id: users[2].id,
-        created_at: new Date(),
-        updated_at: new Date(),
-      },
-      // happens tomorow
-      {
-        title: 'Yarn meetup',
-        description: 'Evento sobre Yarn',
-        localization: 'Avenida central, 340',
-        date: datefns.addDays(new Date(), 1),
-        image_id: files[1].id,
-        user_id: users[1].id,
-        created_at: new Date(),
-        updated_at: new Date(),
-      }
-    ]);
+    let meetupsToInsert = [];
+    let now = datefns.setHours(datefns.setMinutes(new Date(), 0), 0);
+
+    for (let i = 0; i < 48; i++) {
+        const number = i + 1;
+        meetupsToInsert.push({
+          title: `Tech day ${number} meetup`,
+          description: `Evento sobre tech ${number}`,
+          localization: `Rua ${number}, ${i}`,
+          date: now,
+          image_id: files[Math.floor(Math.random() * 2)].id,
+          user_id: users[Math.floor(Math.random() * 3)].id,
+          created_at: new Date(),
+          updated_at: new Date(),
+        });
+        now = datefns.addHours(now, 1);
+    }
+
+    return queryInterface.bulkInsert('meetups', meetupsToInsert);
 
   },
 
